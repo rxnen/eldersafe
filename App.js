@@ -173,6 +173,8 @@ const theme = {
   },
 }
 
+SplashScreen.preventAutoHideAsync();
+
 export default class App extends React.Component {
 
   constructor(props) {
@@ -186,8 +188,6 @@ export default class App extends React.Component {
 
   async componentDidMount() {
     try {
-      await SplashScreen.preventAutoHideAsync();
-
       AsyncStorage.getItem('firstLoad').then((value) => {
         if (value == null || value == undefined) {
           this.setState({ showRealApp: false, loading: false });
@@ -204,8 +204,8 @@ export default class App extends React.Component {
         }
       })
       .then(() => {
-        setTimeout(() => {
-          SplashScreen.hideAsync();
+        setTimeout(async () => {
+          await SplashScreen.hideAsync();
         }, 1500);
       });
     } catch (e) {
