@@ -188,30 +188,31 @@ export default class App extends React.Component {
 
   async componentDidMount() {
     try {
-      AsyncStorage.getItem('firstLoad').then((value) => {
-        if (value == null || value == undefined) {
-          this.setState({ showRealApp: false, loading: false });
-          trackEvent("AppLaunch", {
-            firstLoad: "true",
-            time: new Date().toString(),
-          });
-        } else {
-          this.setState({ showRealApp: true, loading: false });
-          trackEvent("AppLaunch", {
-            firstLoad: "false",
-            time: new Date().toString(),
-          });
-        }
-      })
-      .then(() => {
+      const value = await AsyncStorage.getItem('firstLoad');
+      const isFirstLoad = value == null || value == undefined;
+
+      // Track the event
+      trackEvent("AppLaunch", {
+        firstLoad: isFirstLoad ? "true" : "false",
+        time: new Date().toString(),
+      });
+
+      // Update state first
+      this.setState({ 
+        showRealApp: !isFirstLoad, 
+        loading: false 
+      }, async () => {
+        // This callback runs AFTER the state is set and the UI re-renders
+        // Small delay to ensure the JS bridge is fully ready
         setTimeout(async () => {
           await SplashScreen.hideAsync();
-        }, 1500);
+        }, 200); 
       });
+
     } catch (e) {
       console.log(e);
+      await SplashScreen.hideAsync(); // Hide even if there's an error
     }
-
   }
 
   _renderItem = ({ item }) => {
@@ -234,7 +235,7 @@ export default class App extends React.Component {
   render() {
 
 
-    if (this.state.loading) return <ActivityIndicator size="large" />
+    // if (this.state.loading) return <ActivityIndicator size="large" />
     if (this.state.showRealApp) {
 
       StatusBar.setBarStyle('light-content', true);
