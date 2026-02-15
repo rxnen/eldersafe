@@ -10,6 +10,9 @@ import { verticalScale, horizontalScale, moderateScale } from './styles/Styles';
 import * as SplashScreen from 'expo-splash-screen';
 import Aptabase, { trackEvent } from "@aptabase/react-native";
 
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context';
+
 import {styles} from './styles/Styles'
 import Rooms, {RoomSelect, RoomEditor, RoomAdded, RoomReport} from './pages/Rooms';  
 import Tips from './pages/Tips';
@@ -54,8 +57,11 @@ function BottomNav() {
         tabBarInactiveTintColor: 'gray',
         headerShown: false,
         backgroundColor: '#1C1C1E',
-        tabBarStyle: { backgroundColor: '#1C1C1E', borderTopWidth: 0, elevation: 0 },
+        tabBarStyle: { backgroundColor: '#1C1C1E', borderTopWidth: 0, elevation: 0 }
       }}
+      sceneContainerStyle={{ backgroundColor: '#1C1C1E' }}
+      navigationBarColor="#1C1C1E"
+      
     >
       <Tab.Screen
         name="HomeScreens"
@@ -188,6 +194,8 @@ export default class App extends React.Component {
 
   async componentDidMount() {
     try {
+      // StatusBar.setBarStyle('light-content', true);
+
       const value = await AsyncStorage.getItem('firstLoad');
       const isFirstLoad = value == null || value == undefined;
 
@@ -237,13 +245,13 @@ export default class App extends React.Component {
 
     // if (this.state.loading) return <ActivityIndicator size="large" />
     if (this.state.showRealApp) {
-
-      StatusBar.setBarStyle('light-content', true);
  
       return (
-        <NavigationContainer theme={theme}>
-          <BottomNav />
-        </NavigationContainer>
+        <SafeAreaProvider>
+          <NavigationContainer theme={theme} style={{ backgroundColor: '#1C1C1E' }}>
+            <BottomNav />
+          </NavigationContainer>
+        </SafeAreaProvider>
       );
     } else {
       return (

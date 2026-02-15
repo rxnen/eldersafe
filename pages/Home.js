@@ -1,4 +1,7 @@
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, ScrollView, SafeAreaView, StatusBar, Share, Platform} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, ScrollView, StatusBar, Share, Platform} from 'react-native';
+// import { SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import React, {useState} from 'react';
 import {horizontalScale, styles, verticalScale} from '../styles/Styles'
@@ -149,7 +152,7 @@ export default function Home({navigation}) {
     }, [navigation]);
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
             {Platform.OS === 'android' && <StatusBar backgroundColor="#1C1C1E" barStyle="light-content" />}
 
             <ScrollView contentContainerStyle={{
@@ -158,7 +161,6 @@ export default function Home({navigation}) {
                 justifyContent: 'center',
 
             }}
-            style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 10 : 10 }}
             >
                 <Text style={styles.header}>Hi there!</Text>
                 {score >= 0 && <Text style={styles.subheader}>Your home is {score > 2 ? (score > 3 ? 'very' : 'somewhat') : 'not'} accessible.</Text>}
@@ -179,8 +181,8 @@ export default function Home({navigation}) {
 
                 <TouchableOpacity style={styles.scoreLabel} onPress={async () => {
                     const result = await Share.share({
-                        message: `My home safety score is ${score}/5! Download the ElderSafe app to improve the safety of your home!`,
-                        url: 'https://www.eldersafe.app',
+                        message: `My ElderSafe home safety score is ${score}/5. Find out yours with the ElderSafe app!`,
+                        url: 'https://www.eldersafe.ronenjain.com',
                       });
                 }} >
                     <Text style={styles.scoreLabelText}>Your Current Home Safety Score</Text>

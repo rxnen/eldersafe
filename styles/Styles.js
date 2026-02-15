@@ -16,19 +16,21 @@ export const styles = StyleSheet.create({
       flex: 1,
       flexDirection: 'column', 
       justifyContent: 'space-between',
+      backgroundColor: '#1C1C1E',
     },
 
     header: {
-      flex: 1, 
+      // flex: 1, 
       fontSize: 35, 
       fontWeight: 'bold',
       color: 'white',
       alignSelf: 'flex-start',
       marginLeft: horizontalScale(20),
+      marginTop: verticalScale(10),
     },
 
     subheader: {
-      flex: 1,
+      // flex: 1,
       marginTop: verticalScale(10),
       marginLeft: horizontalScale(20),
       marginRight: horizontalScale(20),
@@ -142,6 +144,9 @@ export const styles = StyleSheet.create({
         fontSize: moderateScale(20),
         textAlign: 'center',
         color: 'white',
+        marginTop: 'auto',
+        marginBottom: 'auto',
+
     },
 
     room: {
@@ -265,7 +270,7 @@ export const styles = StyleSheet.create({
       width: '100%',
       height: '100%',
       textAlign: 'left',
-      paddginVertical: verticalScale(8),
+      paddingVertical: verticalScale(8),
       paddingLeft: horizontalScale(10),
       borderBottomColor: '#24a0ed',
       borderBottomWidth: 1,
@@ -408,6 +413,9 @@ export const styles = StyleSheet.create({
       marginLeft: horizontalScale(25),
       marginRight: horizontalScale(25),
       marginTop: verticalScale(30),
+
+      width: '80%',
+      alignSelf: 'center',
     },
 
     reportOKText: {

@@ -1,4 +1,7 @@
-import { StyleSheet, Text, View, TouchableOpacity, Button, Dimensions, FlatList, TextInput, Alert, SafeAreaView, ScrollView, Platform, StatusBar} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Button, Dimensions, FlatList, TextInput, Alert, ScrollView, Platform, StatusBar} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import {styles} from '../styles/Styles'
 import {wstyles} from '../styles/WelcomeStyles'
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -26,6 +29,8 @@ export default function Settings({navigation}) {
 
     const [ageError, setAgeError] = useState(null);
 
+    const insets = useSafeAreaInsets();
+
     const setValues = async () => {
         try {
             const value = await AsyncStorage.getItem('personalInfo');
@@ -48,10 +53,9 @@ export default function Settings({navigation}) {
     }, []);
 
         return (
-            <SafeAreaView style={[styles.container, {"backgroundColor": "#1C1C1E"}]}>
+            <View style={[styles.container, {"backgroundColor": "#1C1C1E", paddingTop: insets.top}]}>
                 {Platform.OS === 'android' && <StatusBar backgroundColor="#1C1C1E" barStyle="dark-content" />}
-                <ScrollView nestedScrollEnabled={true}
-                style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 10 : 10 }}>
+                <ScrollView nestedScrollEnabled={true}>
                     <Text style={styles.header}>Settings</Text>
                     <Text style={styles.subheader}>Edit your preferences and personal information</Text>
                         <View style={wstyles.ageContainer}>
@@ -95,9 +99,9 @@ export default function Settings({navigation}) {
                                 
                             />
                         </View>
-                        <View style={wstyles.visionContainer} onPress={() => {setVision(!vision)}}>
+                        <View style={wstyles.visionContainer}>
                             <Text style={wstyles.ageLabel}>Vision</Text>
-                            <TouchableOpacity style={{alignItems: 'center', flexDirection: 'row'}}>
+                            <TouchableOpacity style={{alignItems: 'center', flexDirection: 'row'}} onPress={() => {setVision(!vision)}}>
                                 <Checkbox
                                     style={wstyles.checkbox}
                                     value={vision}
@@ -144,6 +148,6 @@ export default function Settings({navigation}) {
                         </View> */}
                 </ScrollView>
                 <ExpoStatusBar style="light" translucent={false} />
-            </SafeAreaView>
+            </View>
         )
     }

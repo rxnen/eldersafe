@@ -1,4 +1,6 @@
-import { StyleSheet, Text, View, TouchableOpacity, Button, Dimensions, FlatList, TextInput, Alert, SafeAreaView, ScrollView, StatusBar, Platform} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Button, Dimensions, FlatList, TextInput, Alert, ScrollView, StatusBar, Platform} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import {styles} from '../styles/Styles'
 import {wstyles} from '../styles/WelcomeStyles'
 import { ExpoStatusBar } from 'expo-status-bar';
@@ -60,10 +62,10 @@ export default function FirstLoad({navigation}) {
 
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
             {Platform.OS === 'android' && <StatusBar backgroundColor="#1C1C1E" barStyle="light-content" />}
             <ScrollView nestedScrollEnabled={true}
-            style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 10 : 10 }}
+            
             >
                 <Text style={styles.header}>Let's Get Started</Text>
                 <Text style={styles.subheader}>Tell us a bit about {userType == "caregiver" ? "the senior you are taking care of." : "yourself." }</Text>

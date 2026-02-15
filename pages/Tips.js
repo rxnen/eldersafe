@@ -1,4 +1,8 @@
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, SectionList, Linking, useWindowDimensions, SafeAreaView, StatusBar, Platform, Image, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, SectionList, Linking, useWindowDimensions, StatusBar, Platform, Image, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import {styles} from '../styles/Styles'
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
@@ -144,6 +148,7 @@ export class Hazards extends React.Component {
 
 const Products = () => {
     const [tipsList, setTipsList] = useState([]);
+
     AsyncStorage.multiGet(["myRooms", "personalInfo"]).then((items) => {
         const tips = [];
         const roomList = JSON.parse(items[0][1]);
@@ -245,6 +250,7 @@ export default function Tips() {
     const initialIndex = route.params?.goTo || 0;
 
     const [index, setIndex] = React.useState(initialIndex);
+    const insets = useSafeAreaInsets();
 
     useEffect(() => {
         if (isFocused) {
@@ -260,8 +266,11 @@ export default function Tips() {
     ]);
 
     return (
-        <SafeAreaView style={{backgroundColor: '#1C1C1E', flex: 1,
-        flexDirection: 'column', }}>
+        // <SafeAreaView style={{backgroundColor: '#1C1C1E', flex: 1,
+        // flexDirection: 'column', }} edges={['top', 'left', 'right']}>
+        <SafeAreaInsetsContext.Consumer>
+        {insets => (
+        <View style={{backgroundColor: '#1C1C1E', flex: 1, paddingTop: insets.top}}>
             {Platform.OS === 'android' && <StatusBar backgroundColor="#1C1C1E" barStyle="light-content" />}
             <TabView
                 navigationState={{ index, routes }}
@@ -280,7 +289,6 @@ export default function Tips() {
                             style={{
                                 backgroundColor: '#1C1C1E',
                                 color: 'white',
-                                marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,                    
                             }}
                             indicatorStyle={{
                                 backgroundColor: "#24a0ed",
@@ -291,6 +299,8 @@ export default function Tips() {
                 
             />
             <ExpoStatusBar style="light" translucent={false} />
-        </SafeAreaView>
+        </View>
+        )}
+        </SafeAreaInsetsContext.Consumer>
     );
 }

@@ -1,4 +1,8 @@
-import { StyleSheet, Text, View, TouchableOpacity, Button, Dimensions, FlatList, TextInput, Alert, ScrollView, SafeAreaView, StatusBar, Platform} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Button, Dimensions, FlatList, TextInput, Alert, ScrollView, StatusBar, Platform} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
+
 import {styles} from '../styles/Styles'
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import { FontAwesome } from '@expo/vector-icons'; 
@@ -15,6 +19,8 @@ export function RoomReport({route, navigation}) {
     const {answers} = route.params;
     const {id} = route.params;
 
+    const insets = useSafeAreaInsets();
+
     const recList = JSON.parse(JSON.stringify(hazardsDict[roomType]));
 
     for (let i = 0; i < answers.length; i++) {
@@ -26,11 +32,11 @@ export function RoomReport({route, navigation}) {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        // <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+        <View style={[styles.container, { paddingTop: insets.top }]}>
             {Platform.OS === 'android' && <StatusBar backgroundColor="#1C1C1E" barStyle="light-content" />}
             <Text style={{
                 color: 'white', fontWeight: 'bold', textDecorationLine: 'underline', textAlign: 'center', fontSize: moderateScale(25), marginBottom: verticalScale(20),
-                marginTop: Platform.OS === 'android' ? StatusBar.currentHeight + 10 : 0,
                 }}>{roomName}</Text>
             <ScrollView>
                 <Text style={styles.reportHeader}>Hazards in this room:</Text>
@@ -52,7 +58,7 @@ export function RoomReport({route, navigation}) {
                 </View>
             </ScrollView>
             <ExpoStatusBar style="light" translucent={false} />
-        </SafeAreaView>
+        </View>
     );
 }
 
@@ -64,8 +70,10 @@ export function RoomAdded({route, navigation}) {
     const {primary} = route.params;
     const {id} = route.params;
 
+    const insets = useSafeAreaInsets();
+
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={[styles.container, { paddingTop: insets.top }]}>
             {Platform.OS === 'android' && <StatusBar backgroundColor="#1C1C1E" barStyle="light-content" />}
             <View style={styles.roomAddedContainer}>
                 <Text style={styles.roomAddedHeader}>Room Added!</Text>
@@ -82,7 +90,7 @@ export function RoomAdded({route, navigation}) {
                 </TouchableOpacity>
             </View>
             <ExpoStatusBar style="light" translucent={false} />
-        </SafeAreaView>
+        </View>
     );
 }
 
@@ -95,6 +103,8 @@ export function RoomEditor({route, navigation}) {
     const [roomText, setRoomText] = useState(name != undefined ? name : "");
     const [nameError, setNameError] = useState(null);
     const [isPrimary, setPrimary] = useState(primary != undefined ? primary : false);
+
+    const insets = useSafeAreaInsets();
 
     // Setting the correct questions based on the room
     const data = [];
@@ -193,9 +203,9 @@ export function RoomEditor({route, navigation}) {
     
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={[styles.container, { paddingTop: insets.top }]}>
             {Platform.OS === 'android' && <StatusBar backgroundColor="#1C1C1E" barStyle="light-content" />}
-            <View style= {[styles.roomHeaderCont, {marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,}]} >
+            <View style= {styles.roomHeaderCont} >
                 <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate(previouslyAnswered != undefined && previouslyAnswered != null ? "Rooms" : "RoomSelection")}>
                         <FontAwesome name="arrow-left" size={30} color="#24a0ed" />
                 </TouchableOpacity>
@@ -209,7 +219,7 @@ export function RoomEditor({route, navigation}) {
                 alignItems: 'center',
                 justifyContent: 'center',
             }}
-            style={{ paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 10 : 10, }}
+
             >
                 <Text style={styles.inputHeader}>Pick a name for this room</Text>
                 <View style={styles.inputContainer}>
@@ -269,15 +279,19 @@ export function RoomEditor({route, navigation}) {
                </View>
             </ScrollView>
             <ExpoStatusBar style="light" translucent={false} />
-        </SafeAreaView>
+        </View>
     );
 };
 
 
 export function RoomSelect({navigation}) {
+
+    const insets = useSafeAreaInsets();
+
     return (
 
-        <SafeAreaView style={[styles.container, {marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,}]}>
+        // <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+        <View style={[styles.container, { paddingTop: insets.top }]}>
             {Platform.OS === 'android' && <StatusBar backgroundColor="#1C1C1E" barStyle="light-content" />}
             <View style={styles.roomHeaderCont} >
                 <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate("Rooms")}>
@@ -299,7 +313,7 @@ export function RoomSelect({navigation}) {
                 }
             />
             <ExpoStatusBar style="light" translucent={false} />
-        </SafeAreaView>
+        </View>
                 
 
     );
@@ -315,20 +329,42 @@ export default class Rooms extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.loadRooms();
+
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            this.loadRooms();
+        });
+    }
+
+    componentWillUnmount() {
+        if (this.focusListener) {
+            this.focusListener();
+        }
+    }
+
+    loadRooms = () => {
+        fetchRooms().then((rooms) => {
+            this.setState({
+                rooms: rooms ? JSON.parse(rooms) : []
+            });
+        });
+    };
+    
     render() {
 
         const { navigation } = this.props;
         const { rooms } = this.state;
 
-        fetchRooms().then((rooms) => {
-            if (rooms == null || rooms == undefined) {
-                rooms = [];
-                this.setState({rooms: []});
-            } else {
-                rooms = JSON.parse(rooms);
-                this.setState({rooms: rooms});
-            }
-        });
+        // fetchRooms().then((rooms) => {
+        //     if (rooms == null || rooms == undefined) {
+        //         rooms = [];
+        //         this.setState({rooms: []});
+        //     } else {
+        //         rooms = JSON.parse(rooms);
+        //         this.setState({rooms: rooms});
+        //     }
+        // });
 
         const deleteRoom = (id) => {
             // prompt user to confirm deletion
@@ -362,9 +398,11 @@ export default class Rooms extends React.Component {
         }
 
         return ( 
-            <SafeAreaView style={styles.container}>
+            <SafeAreaInsetsContext.Consumer>
+            {insets => (
+            <View style={[styles.container, { paddingTop: insets.top }]}>
                 {Platform.OS === 'android' && <StatusBar backgroundColor="#1C1C1E" barStyle="light-content" />}
-                <View style={[styles.roomHeaderContainer, {paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 10 : 10}]}>
+                <View style={styles.roomHeaderContainer}>
                     <Text style={styles.header}>My Rooms</Text>
                     <TouchableOpacity style={styles.plus} onPress={() => navigation.navigate("RoomSelection")}>
                         <FontAwesome name="plus" size={35} color="#24a0ed" />
@@ -408,7 +446,9 @@ export default class Rooms extends React.Component {
                     }
                 </View>
                 <ExpoStatusBar style="light" translucent={false} />
-            </SafeAreaView>
+            </View>
+            )}
+            </SafeAreaInsetsContext.Consumer>
         );
     }
 }
