@@ -45,6 +45,7 @@ export const wstyles = StyleSheet.create({
         marginBottom: verticalScale(10),
         color: 'white',
     },
+    
     ageInput: {
         fontSize: moderateScale(20),
         borderWidth: 1,
@@ -54,6 +55,9 @@ export const wstyles = StyleSheet.create({
         height: verticalScale(40),
         paddingLeft: horizontalScale(10),
         color: 'white',
+
+        textAlignVertical: 'center', // 👈 ADD THIS
+        paddingVertical: 0, // 👈 AND THIS
     },
 
     mobilityContainer: {

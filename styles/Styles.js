@@ -137,6 +137,7 @@ export const styles = StyleSheet.create({
     plus: {
       fontSize: moderateScale(35),
       color: 'white',
+      marginTop: verticalScale(10),
       marginRight: horizontalScale(20),
     },
 
@@ -270,7 +271,7 @@ export const styles = StyleSheet.create({
       width: '100%',
       height: '100%',
       textAlign: 'left',
-      paddingVertical: verticalScale(8),
+      // paddingVertical: verticalScale(8),
       paddingLeft: horizontalScale(10),
       borderBottomColor: '#24a0ed',
       borderBottomWidth: 1,
