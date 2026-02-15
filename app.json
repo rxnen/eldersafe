@@ -7,7 +7,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#722890"
     },
-    "version": "1.1.7",
+    "version": "1.1.6",
     "orientation": "portrait",
     "icon": "./assets/icon-gradient.png",
     "newArchEnabled": true,
@@ -18,7 +18,10 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.rjmobile.eldersafe",
-      "buildNumber": "1.1.7"
+      "buildNumber": "1.1.6",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -37,9 +40,9 @@
       }
     },
     "plugins": [
-        [
-          "expo-build-properties", 
-          {
+      [
+        "expo-build-properties",
+        {
           "ios": {
             "useFrameworks": "static"
           }
