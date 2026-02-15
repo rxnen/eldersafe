@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 
 import {styles} from '../styles/Styles';
-import { colors } from '../styles/theme';
+import { colors, shadows } from '../styles/theme';
 import { cardTouchable, primaryButton, iconButton } from '../styles/buttonStyles';
 import formStyles, { getInputContainerStyle } from '../styles/formStyles';
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
@@ -34,39 +34,245 @@ export function RoomReport({route, navigation}) {
         recList[i].uniqueId = i;
     }
 
+    // Calculate statistics
+    const totalChecks = questions[roomType].length;
+    const checksCompleted = answers.length;
+    const hazardsFound = recList.length;
+    const safetyPercentage = Math.round((checksCompleted / totalChecks) * 100);
+
     return (
-        // <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
         <View style={[styles.container, { paddingTop: insets.top }]}>
             {Platform.OS === 'android' && <StatusBar backgroundColor={colors.background.primary} barStyle="light-content" />}
-            <Text style={{
-                color: colors.text.primary, fontWeight: 'bold', textDecorationLine: 'underline', textAlign: 'center', fontSize: moderateScale(25), marginBottom: verticalScale(20),
-                }}>{roomName}</Text>
-            <ScrollView>
-                <Text style={styles.reportHeader}>Hazards in this room:</Text>
-                <View style={styles.assessment}>
 
-                    {recList.map((item) =>
-                        <View key={item.uniqueId} style={styles.reportItem} >
-                            <FontAwesome name="exclamation-triangle" size={40} color={colors.accent.primary} />
-                            <Text style={styles.reportText}>{item.hazard}</Text>
+            {/* Header */}
+            <View style={styles.roomHeaderCont}>
+                <Pressable
+                    style={({ pressed }) => [
+                        styles.backButton,
+                        pressed && { opacity: 0.7 }
+                    ]}
+                    onPress={() => navigation.navigate("Rooms")}
+                    accessibilityLabel="Back"
+                    accessibilityRole="button"
+                    accessibilityHint="Return to rooms list"
+                >
+                    <FontAwesome name="arrow-left" size={30} color={colors.accent.primary} />
+                </Pressable>
+                <Text style={styles.roomHeaderText}>{roomName}</Text>
+            </View>
+
+            <ScrollView contentContainerStyle={{
+                paddingBottom: verticalScale(40),
+            }}>
+
+                {/* Summary Card */}
+                <View style={{
+                    marginHorizontal: horizontalScale(20),
+                    marginTop: verticalScale(30),
+                    backgroundColor: colors.background.secondary,
+                    borderRadius: moderateScale(15),
+                    padding: horizontalScale(20),
+                    ...shadows.md,
+                }}>
+                    <Text style={{
+                        fontSize: moderateScale(22),
+                        fontWeight: 'bold',
+                        color: colors.text.primary,
+                        marginBottom: verticalScale(15),
+                        textAlign: 'center',
+                    }}>Room Assessment Summary</Text>
+
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-around',
+                        marginTop: verticalScale(10),
+                    }}>
+                        <View style={{ alignItems: 'center', flex: 1 }}>
+                            <Text style={{
+                                fontSize: moderateScale(40),
+                                fontWeight: 'bold',
+                                color: hazardsFound === 0 ? colors.status.success : colors.status.warning,
+                            }}>{hazardsFound}</Text>
+                            <Text style={{
+                                fontSize: moderateScale(16),
+                                color: colors.text.secondary,
+                                textAlign: 'center',
+                            }}>Hazards{'\n'}Found</Text>
                         </View>
-                        )
-                    }
 
+                        <View style={{
+                            width: 1,
+                            backgroundColor: colors.border.secondary,
+                            marginHorizontal: horizontalScale(10),
+                        }} />
+
+                        <View style={{ alignItems: 'center', flex: 1 }}>
+                            <Text style={{
+                                fontSize: moderateScale(40),
+                                fontWeight: 'bold',
+                                color: colors.status.success,
+                            }}>{safetyPercentage}%</Text>
+                            <Text style={{
+                                fontSize: moderateScale(16),
+                                color: colors.text.secondary,
+                                textAlign: 'center',
+                            }}>Safety{'\n'}Checks</Text>
+                        </View>
+                    </View>
+
+                    <View style={{
+                        marginTop: verticalScale(20),
+                        paddingTop: verticalScale(15),
+                        borderTopWidth: 1,
+                        borderTopColor: colors.border.secondary,
+                    }}>
+                        <Text style={{
+                            fontSize: moderateScale(16),
+                            color: colors.text.secondary,
+                            textAlign: 'center',
+                        }}>
+                            {checksCompleted} out of {totalChecks} safety checks completed
+                        </Text>
+                    </View>
                 </View>
-                <View styles={styles.reportButtons}>
+
+                {/* Hazards Section */}
+                {hazardsFound > 0 ? (
+                    <>
+                        <Text style={{
+                            fontSize: moderateScale(24),
+                            fontWeight: 'bold',
+                            color: colors.text.primary,
+                            marginTop: verticalScale(35),
+                            marginLeft: horizontalScale(20),
+                            marginBottom: verticalScale(15),
+                        }}>Identified Hazards</Text>
+
+                        <View style={{
+                            marginHorizontal: horizontalScale(20),
+                        }}>
+                            {recList.map((item, index) => (
+                                <View key={item.uniqueId} style={{
+                                    backgroundColor: colors.background.tertiary,
+                                    borderRadius: moderateScale(12),
+                                    padding: horizontalScale(16),
+                                    marginBottom: verticalScale(12),
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    ...shadows.sm,
+                                }}>
+                                    <View style={{
+                                        width: horizontalScale(50),
+                                        height: verticalScale(50),
+                                        borderRadius: moderateScale(25),
+                                        backgroundColor: colors.background.secondary,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        marginRight: horizontalScale(15),
+                                    }}>
+                                        <FontAwesome
+                                            name="exclamation-triangle"
+                                            size={24}
+                                            color={colors.status.warning}
+                                        />
+                                    </View>
+                                    <View style={{ flex: 1 }}>
+                                        <Text style={{
+                                            fontSize: moderateScale(18),
+                                            color: colors.text.primary,
+                                            lineHeight: moderateScale(24),
+                                        }}>{item.hazard}</Text>
+                                    </View>
+                                </View>
+                            ))}
+                        </View>
+                    </>
+                ) : (
+                    <View style={{
+                        marginHorizontal: horizontalScale(20),
+                        marginTop: verticalScale(40),
+                        alignItems: 'center',
+                    }}>
+                        <FontAwesome
+                            name="check-circle"
+                            size={80}
+                            color={colors.status.success}
+                        />
+                        <Text style={{
+                            fontSize: moderateScale(24),
+                            fontWeight: 'bold',
+                            color: colors.status.success,
+                            marginTop: verticalScale(20),
+                            textAlign: 'center',
+                        }}>All Clear!</Text>
+                        <Text style={{
+                            fontSize: moderateScale(18),
+                            color: colors.text.secondary,
+                            marginTop: verticalScale(10),
+                            textAlign: 'center',
+                            paddingHorizontal: horizontalScale(20),
+                        }}>No hazards identified in this room. Great job keeping it safe!</Text>
+                    </View>
+                )}
+
+                {/* Action Buttons */}
+                <View style={{
+                    marginTop: verticalScale(40),
+                    marginHorizontal: horizontalScale(20),
+                }}>
                     <Pressable
                         style={({ pressed }) => [
-                            styles.reportOK,
-                            pressed && { opacity: 0.7, borderColor: colors.accent.primary }
+                            {
+                                backgroundColor: colors.background.secondary,
+                                borderWidth: 2,
+                                borderColor: colors.accent.primary,
+                                borderRadius: moderateScale(10),
+                                height: verticalScale(50),
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginBottom: verticalScale(12),
+                                ...shadows.sm,
+                            },
+                            pressed && { opacity: 0.7, backgroundColor: colors.background.tertiary }
                         ]}
                         onPress={() => navigation.navigate("Rooms")}
-                        accessibilityLabel="OK"
+                        accessibilityLabel="Return to rooms"
                         accessibilityRole="button"
-                        accessibilityHint="Return to rooms list"
+                        accessibilityHint="Go back to rooms list"
                     >
-                        <Text style={styles.reportOKText}>OK</Text>
+                        <Text style={{
+                            color: colors.accent.primary,
+                            fontSize: moderateScale(18),
+                            fontWeight: 'bold',
+                        }}>Done</Text>
                     </Pressable>
+
+                    {hazardsFound > 0 && (
+                        <Pressable
+                            style={({ pressed }) => [
+                                {
+                                    backgroundColor: colors.background.primary,
+                                    borderWidth: 1,
+                                    borderColor: colors.border.primary,
+                                    borderRadius: moderateScale(10),
+                                    height: verticalScale(50),
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                },
+                                pressed && { opacity: 0.7 }
+                            ]}
+                            onPress={() => navigation.navigate("Tips", { goTo: 1 })}
+                            accessibilityLabel="View suggested products"
+                            accessibilityRole="button"
+                            accessibilityHint="Navigate to product recommendations"
+                        >
+                            <Text style={{
+                                color: colors.text.primary,
+                                fontSize: moderateScale(18),
+                                fontWeight: 'bold',
+                            }}>View Suggested Products</Text>
+                        </Pressable>
+                    )}
                 </View>
             </ScrollView>
             <ExpoStatusBar style="light" translucent={false} />
@@ -349,19 +555,49 @@ export function RoomEditor({route, navigation}) {
                                     <Text style={styles.assessmentButtonText}>Save</Text>
                                 </Pressable>
                                 {previouslyAnswered != undefined && previouslyAnswered != null ?
-                                <Pressable
-                                    style={({ pressed }) => [
-                                        styles.assessmentButton,
-                                        {borderColor: colors.status.error},
-                                        pressed && { opacity: 0.7 }
-                                    ]}
-                                    onPress={() => {deleteRoom(id)}}
-                                    accessibilityLabel="Delete"
-                                    accessibilityRole="button"
-                                    accessibilityHint="Delete this room"
-                                >
-                                    <Text style={[styles.assessmentButtonText, {color: colors.status.error}]}>Delete</Text>
-                                </Pressable> : null}
+                                <>
+                                    <Pressable
+                                        style={({ pressed }) => [
+                                            styles.assessmentButton,
+                                            {borderColor: colors.accent.primary},
+                                            pressed && { opacity: 0.7 }
+                                        ]}
+                                        onPress={() => {
+                                            let fullRoomText = roomText || "My " + roomType;
+                                            let answers = [];
+                                            for (let i = 0; i < selected.length; i++) {
+                                                if (selected[i].isChecked) {
+                                                    answers.push(selected[i].id);
+                                                }
+                                            }
+                                            navigation.navigate("RoomReport", {
+                                                roomType: roomType,
+                                                roomName: fullRoomText,
+                                                answers: answers,
+                                                primary: isPrimary,
+                                                id: id
+                                            });
+                                        }}
+                                        accessibilityLabel="View Results"
+                                        accessibilityRole="button"
+                                        accessibilityHint="View the assessment results for this room"
+                                    >
+                                        <Text style={styles.assessmentButtonText}>View Results</Text>
+                                    </Pressable>
+                                    <Pressable
+                                        style={({ pressed }) => [
+                                            styles.assessmentButton,
+                                            {borderColor: colors.status.error},
+                                            pressed && { opacity: 0.7 }
+                                        ]}
+                                        onPress={() => {deleteRoom(id)}}
+                                        accessibilityLabel="Delete"
+                                        accessibilityRole="button"
+                                        accessibilityHint="Delete this room"
+                                    >
+                                        <Text style={[styles.assessmentButtonText, {color: colors.status.error}]}>Delete</Text>
+                                    </Pressable>
+                                </> : null}
                             </View>
                         }
                         renderItem={({ item }) =>
@@ -508,17 +744,9 @@ export default class Rooms extends React.Component {
                     },
                     {
                         text: "Delete",
-                        onPress: () => {
-                            deleteRoomData(id);
-                            fetchRooms().then((rooms) => {
-                                if (rooms == null) {
-                                    rooms = [];
-                                    this.setState({rooms: []});
-                                } else {
-                                    rooms = JSON.parse(rooms);
-                                    this.setState({rooms: rooms});
-                                }
-                            });
+                        onPress: async () => {
+                            await deleteRoomData(id);
+                            this.loadRooms();
                         }
                     }
                 ],
@@ -587,21 +815,64 @@ export default class Rooms extends React.Component {
                             </Pressable> : null
                         }
                         renderItem={({ item }) =>
-                        <Pressable
-                            style={({ pressed }) => [
-                                styles.room,
-                                {justifyContent: "space-between"},
-                                pressed && cardTouchable.pressed
-                            ]}
-                            onPress={() => navigation.navigate("RoomEditor", {roomType: item['type'], roomIcon: item['icon'], previouslyAnswered: item['answers'], name: item['name'], primary: item['primary'], id: item['id']})}
-                            onLongPress={() => deleteRoom(item['id'])}
-                            accessibilityLabel={`${item['name']}`}
-                            accessibilityRole="button"
-                            accessibilityHint="Tap to edit, long press to delete"
-                         >
-                            <FontAwesome name={item['icon']} size={40} color={colors.accent.primary} />
-                            <Text style={styles.roomText}>{item['name']}</Text>
-                        </Pressable>
+                            <Pressable
+                                style={({ pressed }) => [
+                                    styles.room,
+                                    pressed && cardTouchable.pressed
+                                ]}
+                                onPress={() => navigation.navigate("RoomEditor", {roomType: item['type'], roomIcon: item['icon'], previouslyAnswered: item['answers'], name: item['name'], primary: item['primary'], id: item['id']})}
+                                onLongPress={() => deleteRoom(item['id'])}
+                                accessibilityLabel={`${item['name']}`}
+                                accessibilityRole="button"
+                                accessibilityHint="Tap to edit room, long press to delete, or tap info icon to view results"
+                             >
+                                <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
+                                    <FontAwesome name={item['icon']} size={40} color={colors.accent.primary} />
+                                    <Text style={[styles.roomText, {flex: 1, marginLeft: horizontalScale(20)}]}>{item['name']}</Text>
+                                </View>
+                                <Pressable
+                                    style={({ pressed }) => [
+                                        {
+                                            padding: horizontalScale(6),
+                                            borderRadius: moderateScale(20),
+                                            width: horizontalScale(40),
+                                            height: verticalScale(40),
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        },
+                                        pressed && { backgroundColor: colors.background.secondary, opacity: 0.8 }
+                                    ]}
+                                    onPress={(e) => {
+                                        e.stopPropagation();
+                                        navigation.navigate("RoomReport", {
+                                            roomType: item['type'],
+                                            roomName: item['name'],
+                                            answers: item['answers'],
+                                            primary: item['primary'],
+                                            id: item['id']
+                                        });
+                                    }}
+                                    accessibilityLabel="View room results"
+                                    accessibilityRole="button"
+                                    accessibilityHint="View assessment results and hazards for this room"
+                                >
+                                    <View style={{
+                                        width: 22,
+                                        height: 22,
+                                        borderRadius: 11,
+                                        borderWidth: 1.5,
+                                        borderColor: colors.accent.primary,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}>
+                                        <Text style={{
+                                            color: colors.accent.primary,
+                                            fontSize: moderateScale(14),
+                                            fontWeight: 'bold',
+                                        }}>i</Text>
+                                    </View>
+                                </Pressable>
+                            </Pressable>
                         }
                     />
                     }
