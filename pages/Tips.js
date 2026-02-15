@@ -18,9 +18,9 @@ import { migrateRoomData, getHazardStatus, updateHazardStatus } from '../scripti
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-// Progress Summary Component
-const ProgressSummary = ({ roomList, personalInfo, activeFilter, onFilterChange }) => {
-    const stats = useMemo(() => {
+// Calculate stats hook
+const useHazardStats = (roomList, personalInfo) => {
+    return useMemo(() => {
         if (!roomList || roomList.length === 0) {
             return { total: 0, inProgress: 0, fixed: 0, notAddressed: 0, percentage: 0 };
         }
@@ -33,7 +33,6 @@ const ProgressSummary = ({ roomList, personalInfo, activeFilter, onFilterChange 
         roomList.forEach(room => {
             const roomHazards = hazardsDict[room.type] || [];
             roomHazards.forEach((hazard, k) => {
-                // Check if this hazard is excluded
                 const exclusion = exclusions.find(r => r.id === k && r.room === room.type);
                 const isExcluded = exclusion &&
                     !(personalInfo[exclusion.exclusion] === "true" ||
@@ -57,7 +56,10 @@ const ProgressSummary = ({ roomList, personalInfo, activeFilter, onFilterChange 
         const percentage = total > 0 ? Math.round((fixed / total) * 100) : 0;
         return { total, inProgress, fixed, notAddressed, percentage };
     }, [roomList, personalInfo]);
+};
 
+// Progress Ring Component (scrollable)
+const ProgressRing = ({ stats }) => {
     const gradientColors = stats.percentage >= 75
         ? ['#4CAF50', '#81C784']
         : stats.percentage >= 50
@@ -65,75 +67,78 @@ const ProgressSummary = ({ roomList, personalInfo, activeFilter, onFilterChange 
             : ['#F44336', '#EF5350'];
 
     return (
-        <View style={styles.progressSummaryContainer}>
-            <View style={styles.progressRingContainer}>
-                <View style={styles.progressOuterRing}>
-                    <LinearGradient
-                        colors={gradientColors}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 1 }}
-                        style={styles.progressGradientRing}
-                    >
-                        <View style={styles.progressInnerCircle}>
-                            <Text style={styles.progressPercentage}>{stats.percentage}%</Text>
-                            <Text style={styles.progressLabel}>Complete</Text>
-                        </View>
-                    </LinearGradient>
-                </View>
+        <View style={styles.progressRingContainer}>
+            <View style={styles.progressOuterRing}>
+                <LinearGradient
+                    colors={gradientColors}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.progressGradientRing}
+                >
+                    <View style={styles.progressInnerCircle}>
+                        <Text style={styles.progressPercentage}>{stats.percentage}%</Text>
+                        <Text style={styles.progressLabel}>Complete</Text>
+                    </View>
+                </LinearGradient>
             </View>
+        </View>
+    );
+};
 
-            <View style={styles.progressStatsContainer}>
-                <Pressable
-                    style={({ pressed }) => [
-                        styles.progressStatCard,
-                        activeFilter === 'not_addressed' && { borderColor: '#F44336' },
-                        pressed && { opacity: 0.7, transform: [{ scale: 0.98 }] }
-                    ]}
-                    onPress={() => onFilterChange(activeFilter === 'not_addressed' ? 'all' : 'not_addressed')}
-                    accessibilityLabel={`Filter by not addressed hazards, ${stats.notAddressed} total`}
-                    accessibilityRole="button"
-                    accessibilityHint="Tap to filter hazards"
-                >
-                    <Text style={[styles.progressStatNumber, { color: '#F44336' }]}>
-                        {stats.notAddressed}
-                    </Text>
-                    <Text style={styles.progressStatLabel}>To Address</Text>
-                </Pressable>
+// Stats Cards Component (reusable for both scrollable and sticky versions)
+const StatsCards = ({ stats, activeFilter, onFilterChange }) => {
+    return (
+        <View style={styles.progressStatsContainer}>
+            <Pressable
+                style={({ pressed }) => [
+                    styles.progressStatCard,
+                    activeFilter === 'not_addressed' && { borderColor: '#F44336' },
+                    pressed && { opacity: 0.7, transform: [{ scale: 0.98 }] }
+                ]}
+                onPress={() => onFilterChange(activeFilter === 'not_addressed' ? 'all' : 'not_addressed')}
+                accessibilityLabel={`Filter by not addressed hazards, ${stats.notAddressed} total`}
+                accessibilityRole="button"
+                accessibilityHint="Tap to filter hazards"
+            >
+                <Text style={[styles.progressStatNumber, { color: '#F44336' }]}>
+                    {stats.notAddressed}
+                </Text>
+                <Text style={styles.progressStatLabel}>To Address</Text>
+            </Pressable>
 
-                <Pressable
-                    style={({ pressed }) => [
-                        styles.progressStatCard,
-                        activeFilter === 'in_progress' && { borderColor: '#FF9800' },
-                        pressed && { opacity: 0.7, transform: [{ scale: 0.98 }] }
-                    ]}
-                    onPress={() => onFilterChange(activeFilter === 'in_progress' ? 'all' : 'in_progress')}
-                    accessibilityLabel={`Filter by in progress hazards, ${stats.inProgress} total`}
-                    accessibilityRole="button"
-                    accessibilityHint="Tap to filter hazards"
-                >
-                    <Text style={[styles.progressStatNumber, { color: '#FF9800' }]}>
-                        {stats.inProgress}
-                    </Text>
-                    <Text style={styles.progressStatLabel}>In Progress</Text>
-                </Pressable>
+            <Pressable
+                style={({ pressed }) => [
+                    styles.progressStatCard,
+                    activeFilter === 'in_progress' && { borderColor: '#FF9800' },
+                    pressed && { opacity: 0.7, transform: [{ scale: 0.98 }] }
+                ]}
+                onPress={() => onFilterChange(activeFilter === 'in_progress' ? 'all' : 'in_progress')}
+                accessibilityLabel={`Filter by in progress hazards, ${stats.inProgress} total`}
+                accessibilityRole="button"
+                accessibilityHint="Tap to filter hazards"
+            >
+                <Text style={[styles.progressStatNumber, { color: '#FF9800' }]}>
+                    {stats.inProgress}
+                </Text>
+                <Text style={styles.progressStatLabel}>In Progress</Text>
+            </Pressable>
 
-                <Pressable
-                    style={({ pressed }) => [
-                        styles.progressStatCard,
-                        activeFilter === 'addressed' && { borderColor: '#4CAF50' },
-                        pressed && { opacity: 0.7, transform: [{ scale: 0.98 }] }
-                    ]}
-                    onPress={() => onFilterChange(activeFilter === 'addressed' ? 'all' : 'addressed')}
-                    accessibilityLabel={`Filter by addressed hazards, ${stats.fixed} total`}
-                    accessibilityRole="button"
-                    accessibilityHint="Tap to filter hazards"
-                >
-                    <Text style={[styles.progressStatNumber, { color: '#4CAF50' }]}>
-                        {stats.fixed}
-                    </Text>
-                    <Text style={styles.progressStatLabel}>Addressed</Text>
-                </Pressable>
-            </View>
+            <Pressable
+                style={({ pressed }) => [
+                    styles.progressStatCard,
+                    activeFilter === 'addressed' && { borderColor: '#4CAF50' },
+                    pressed && { opacity: 0.7, transform: [{ scale: 0.98 }] }
+                ]}
+                onPress={() => onFilterChange(activeFilter === 'addressed' ? 'all' : 'addressed')}
+                accessibilityLabel={`Filter by addressed hazards, ${stats.fixed} total`}
+                accessibilityRole="button"
+                accessibilityHint="Tap to filter hazards"
+            >
+                <Text style={[styles.progressStatNumber, { color: '#4CAF50' }]}>
+                    {stats.fixed}
+                </Text>
+                <Text style={styles.progressStatLabel}>Addressed</Text>
+            </Pressable>
         </View>
     );
 };
@@ -277,7 +282,11 @@ const Hazards = () => {
     const [personalInfo, setPersonalInfo] = useState(null);
     const [refreshKey, setRefreshKey] = useState(0);
     const [activeFilter, setActiveFilter] = useState('all');
+    const [isStatsStuck, setIsStatsStuck] = useState(false);
     const isFocused = useIsFocused();
+
+    // Approximate height of the progress ring (180px ring + margins)
+    const PROGRESS_RING_HEIGHT = 200;
 
     useEffect(() => {
         // Run migration on mount
@@ -393,29 +402,54 @@ const Hazards = () => {
         }
     };
 
+    const handleScroll = (event) => {
+        const scrollY = event.nativeEvent.contentOffset.y;
+        setIsStatsStuck(scrollY > PROGRESS_RING_HEIGHT);
+    };
+
+    const stats = useHazardStats(roomList, personalInfo);
+
     return (
         <View style={styles.hazardContainer}>
-            {roomList.length > 0 && personalInfo && (
-                <ProgressSummary
-                    roomList={roomList}
-                    personalInfo={personalInfo}
-                    activeFilter={activeFilter}
-                    onFilterChange={handleFilterChange}
-                />
-            )}
-
-            {filteredHazards.length === 0 && (
-                <Text style={styles.hazardEmptyText}>
-                    {activeFilter === 'all'
-                        ? 'No hazards have been identified in your home!'
-                        : `No ${activeFilter === 'not_addressed' ? 'unaddressed' : activeFilter.replace('_', ' ')} hazards found.`
-                    }
-                </Text>
+            {/* Sticky stats header - absolutely positioned, only visible when scrolled */}
+            {isStatsStuck && roomList.length > 0 && personalInfo && (
+                <View style={styles.stickyStatsAbsolute}>
+                    <StatsCards
+                        stats={stats}
+                        activeFilter={activeFilter}
+                        onFilterChange={handleFilterChange}
+                    />
+                </View>
             )}
 
             <SectionList
                 sections={filteredHazards}
                 keyExtractor={(item, index) => `${item.questionID}-${item.roomID}-${index}`}
+                stickySectionHeadersEnabled={false}
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
+                ListHeaderComponent={
+                    roomList.length > 0 && personalInfo ? (
+                        <View>
+                            <ProgressRing stats={stats} />
+                            <View style={styles.progressSummaryStatsContainer}>
+                                <StatsCards
+                                    stats={stats}
+                                    activeFilter={activeFilter}
+                                    onFilterChange={handleFilterChange}
+                                />
+                            </View>
+                        </View>
+                    ) : null
+                }
+                ListEmptyComponent={
+                    <Text style={styles.hazardEmptyText}>
+                        {activeFilter === 'all'
+                            ? 'No hazards have been identified in your home!'
+                            : `No ${activeFilter === 'not_addressed' ? 'unaddressed' : activeFilter.replace('_', ' ')} hazards found.`
+                        }
+                    </Text>
+                }
                 renderItem={({ item }) => (
                     <HazardItem item={item} onStatusChange={handleStatusChange} />
                 )}

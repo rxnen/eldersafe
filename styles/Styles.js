@@ -654,6 +654,25 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
 
+  progressSummaryStatsContainer: {
+    paddingHorizontal: horizontalScale(16),
+    paddingBottom: verticalScale(20),
+  },
+
+  stickyStatsAbsolute: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 100,
+    backgroundColor: colors.background.primary,
+    paddingHorizontal: horizontalScale(16),
+    paddingBottom: verticalScale(12),
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border.secondary,
+    ...shadows.md,
+  },
+
   progressStatCard: {
     flex: 1,
     backgroundColor: colors.background.secondary,
