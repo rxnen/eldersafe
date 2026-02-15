@@ -516,6 +516,14 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.background.primary,
   },
 
+  hazardEmptyText: {
+    fontSize: moderateScale(20),
+    textAlign: 'center',
+    color: colors.text.primary,
+    marginTop: verticalScale(40),
+    marginHorizontal: horizontalScale(25),
+  },
+
   hazardHeader: {
     fontSize: moderateScale(typography.h3.fontSize),
     fontWeight: typography.h3.fontWeight,
@@ -539,8 +547,9 @@ export const styles = StyleSheet.create({
   },
 
   hazardIconStyle: {
-    width: horizontalScale(75),
-    color: colors.text.primary,
+    width: horizontalScale(50),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   hazardIcon: {
@@ -585,5 +594,249 @@ export const styles = StyleSheet.create({
     color: colors.text.primary,
     fontSize: moderateScale(20),
     fontWeight: 'bold',
+  },
+
+  // ============================================================================
+  // PROGRESS TRACKING STYLES
+  // ============================================================================
+
+  progressSummaryContainer: {
+    width: '90%',
+    alignSelf: 'center',
+    marginTop: verticalScale(20),
+    marginBottom: verticalScale(20),
+  },
+
+  progressRingContainer: {
+    alignItems: 'center',
+    marginBottom: verticalScale(20),
+  },
+
+  progressOuterRing: {
+    width: 180,
+    height: 180,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  progressGradientRing: {
+    width: 160,
+    height: 160,
+    borderRadius: borderRadius.round,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  progressInnerCircle: {
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    backgroundColor: colors.background.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  progressPercentage: {
+    fontSize: moderateScale(40),
+    fontWeight: typography.display.fontWeight,
+    color: colors.text.primary,
+  },
+
+  progressLabel: {
+    fontSize: moderateScale(14),
+    color: colors.text.secondary,
+    marginTop: verticalScale(5),
+  },
+
+  progressStatsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+
+  progressStatCard: {
+    flex: 1,
+    backgroundColor: colors.background.secondary,
+    borderRadius: moderateScale(borderRadius.lg),
+    paddingVertical: verticalScale(12),
+    paddingHorizontal: horizontalScale(8),
+    marginHorizontal: horizontalScale(4),
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'transparent',
+    ...shadows.sm,
+  },
+
+  progressStatNumber: {
+    fontSize: moderateScale(24),
+    fontWeight: typography.h2.fontWeight,
+    color: colors.text.primary,
+  },
+
+  progressStatLabel: {
+    fontSize: moderateScale(12),
+    color: colors.text.secondary,
+    marginTop: verticalScale(4),
+    textAlign: 'center',
+  },
+
+  // ============================================================================
+  // ENHANCED HAZARD CARD STYLES
+  // ============================================================================
+
+  hazardCardContainer: {
+    marginTop: verticalScale(10),
+    marginBottom: verticalScale(10),
+    marginLeft: horizontalScale(20),
+    marginRight: horizontalScale(20),
+    backgroundColor: colors.background.secondary,
+    borderRadius: moderateScale(borderRadius.md),
+    ...shadows.sm,
+  },
+
+  hazardCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: spacing.md,
+    paddingLeft: horizontalScale(20),
+  },
+
+  hazardCardContent: {
+    flex: 1,
+    marginLeft: horizontalScale(16),
+  },
+
+  hazardCardText: {
+    fontSize: moderateScale(16),
+    color: colors.text.primary,
+    marginBottom: verticalScale(4),
+  },
+
+  hazardStatusBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: verticalScale(4),
+    paddingHorizontal: horizontalScale(8),
+    borderRadius: moderateScale(borderRadius.sm),
+    alignSelf: 'flex-start',
+  },
+
+  hazardStatusIcon: {
+    marginRight: horizontalScale(4),
+  },
+
+  hazardStatusText: {
+    fontSize: moderateScale(12),
+    fontWeight: '600',
+  },
+
+  hazardActionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: horizontalScale(spacing.md),
+    paddingVertical: verticalScale(12),
+    borderTopWidth: 1,
+    borderTopColor: colors.border.primary,
+  },
+
+  hazardActionButton: {
+    flex: 1,
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: horizontalScale(8),
+    marginHorizontal: horizontalScale(4),
+    borderRadius: moderateScale(borderRadius.sm),
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: horizontalScale(80),
+  },
+
+  hazardActionButtonText: {
+    fontSize: moderateScale(13),
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+
+  // ============================================================================
+  // TIMELINE STYLES
+  // ============================================================================
+
+  timelineContainer: {
+    flex: 1,
+    width: '100%',
+    paddingTop: verticalScale(20),
+  },
+
+  timelineItem: {
+    flexDirection: 'row',
+    marginHorizontal: horizontalScale(20),
+    marginBottom: verticalScale(16),
+    paddingBottom: verticalScale(16),
+    paddingRight: horizontalScale(8),
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border.secondary,
+    backgroundColor: colors.background.primary,
+  },
+
+  timelineDeleteButton: {
+    backgroundColor: colors.status.error,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingRight: horizontalScale(20),
+    marginBottom: verticalScale(16),
+  },
+
+  timelineDeleteText: {
+    color: colors.text.primary,
+    fontWeight: '600',
+    fontSize: moderateScale(14),
+  },
+
+  timelineIconContainer: {
+    width: horizontalScale(40),
+    height: verticalScale(40),
+    borderRadius: moderateScale(borderRadius.round),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: horizontalScale(12),
+  },
+
+  timelineContent: {
+    flex: 1,
+  },
+
+  timelineRoom: {
+    fontSize: moderateScale(12),
+    color: colors.text.secondary,
+    marginBottom: verticalScale(4),
+  },
+
+  timelineHazardText: {
+    fontSize: moderateScale(14),
+    color: colors.text.primary,
+    marginBottom: verticalScale(6),
+  },
+
+  timelineStatusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+  timelineStatus: {
+    fontSize: moderateScale(12),
+    fontWeight: '600',
+  },
+
+  timelineTimestamp: {
+    fontSize: moderateScale(11),
+    color: colors.text.secondary,
+  },
+
+  timelineEmptyText: {
+    fontSize: moderateScale(16),
+    color: colors.text.secondary,
+    textAlign: 'center',
+    marginTop: verticalScale(40),
+    marginHorizontal: horizontalScale(20),
   },
 });
