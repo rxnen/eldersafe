@@ -1,121 +1,133 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { colors, spacing, borderRadius, typography } from './theme';
+import { horizontalScale, verticalScale, moderateScale } from './scaling';
 
-const { width, height } = Dimensions.get('window');
-
-const guidelineBaseWidth = 375;
-const guidelineBaseHeight = 812;
-
-export const horizontalScale = (size) => (width / guidelineBaseWidth) * size;
-export const verticalScale = (size) => (height / guidelineBaseHeight) * size;
-export const moderateScale = (size, factor = 0.5) => size + (horizontalScale(size) - size) * factor;
+export { horizontalScale, verticalScale, moderateScale };
 
 export const wstyles = StyleSheet.create({
-    // Welcome Page Styles
-    userOptions: {
-        height: "90%",
-        width: "100%",
-        alignItems: 'center',
-        marginTop: verticalScale(50),
-    },
-    optionText: {
-        fontSize: moderateScale(28),
-        color: 'white',
-        textAlign: 'center',
-        paddingHorizontal: horizontalScale(30),
-        paddingVertical: verticalScale(10),
-    },
-    optionButton: {
-        borderColor: 'white',
-        backgroundColor: '#1C1C1E',
-        borderRadius: 8,
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        width: "80%",
-        height: "50%",
-        marginVertical: verticalScale(20),
-    },
-    ageContainer: {
-        marginLeft: horizontalScale(25),
-        marginTop: verticalScale(20),
-    },
-    ageLabel: {
-        fontSize: moderateScale(20),
-        fontWeight: 'bold',
-        marginRight: horizontalScale(10),
-        marginBottom: verticalScale(10),
-        color: 'white',
-    },
-    
-    ageInput: {
-        fontSize: moderateScale(20),
-        borderWidth: 1,
-        borderColor: 'white',
-        borderRadius: 5,
-        width: '60%',
-        height: verticalScale(40),
-        paddingLeft: horizontalScale(10),
-        color: 'white',
+  // ============================================================================
+  // WELCOME PAGE STYLES
+  // ============================================================================
 
-        textAlignVertical: 'center', // 👈 ADD THIS
-        paddingVertical: 0, // 👈 AND THIS
-    },
+  userOptions: {
+    height: '90%',
+    width: '100%',
+    alignItems: 'center',
+    marginTop: verticalScale(50),
+  },
 
-    mobilityContainer: {
-        marginTop: verticalScale(20),
-        marginLeft: horizontalScale(25),
-        width: horizontalScale(300),
-        zIndex: 1,
-    },
+  optionText: {
+    fontSize: moderateScale(typography.h2.fontSize),
+    color: colors.text.primary,
+    textAlign: 'center',
+    paddingHorizontal: horizontalScale(30),
+    paddingVertical: verticalScale(10),
+  },
 
-    visionContainer: {
-        marginTop: verticalScale(20),
-        marginLeft: horizontalScale(25),
-        width: horizontalScale(300),
-    },
+  optionButton: {
+    borderColor: colors.border.primary,
+    backgroundColor: colors.background.primary,
+    borderRadius: borderRadius.md,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    width: '80%',
+    height: '50%',
+    marginVertical: verticalScale(20),
+  },
 
-    hearingContainer: {
-        marginTop: verticalScale(20),
-        marginLeft: horizontalScale(25),
-        width: horizontalScale(300),
-    },
+  // ============================================================================
+  // FORM INPUT STYLES
+  // ============================================================================
 
-    checkbox: {
-        marginTop: verticalScale(10),
-        borderWidth: 2,
-        borderColor: 'white',
-        borderRadius: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
+  ageContainer: {
+    marginLeft: horizontalScale(25),
+    marginTop: verticalScale(20),
+  },
 
-    checkboxLabel: {
-        color: 'white',
-        fontSize: moderateScale(20),
-        marginTop: verticalScale(10),
-        marginLeft: horizontalScale(10),
-    },
+  ageLabel: {
+    fontSize: moderateScale(20),
+    fontWeight: 'bold',
+    marginRight: horizontalScale(10),
+    marginBottom: verticalScale(10),
+    color: colors.text.primary,
+  },
 
-    submitContainer: {
-        marginTop: verticalScale(30),
-        width: '100%',
-        alignItems: 'center',
-    },
+  ageInput: {
+    fontSize: moderateScale(20),
+    borderWidth: 1,
+    borderColor: colors.border.primary,
+    borderRadius: borderRadius.sm,
+    width: '60%',
+    height: verticalScale(40),
+    paddingLeft: horizontalScale(10),
+    color: colors.text.primary,
+    textAlignVertical: 'center',
+    paddingVertical: 0,
+  },
 
-    submitButton: {
-        backgroundColor: '#1C1C1E',
-        borderWidth: 1,
-        borderColor: 'white',
-        borderRadius: 5,
-        width: horizontalScale(300),
-        height: verticalScale(40),
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
+  mobilityContainer: {
+    marginTop: verticalScale(20),
+    marginLeft: horizontalScale(25),
+    width: horizontalScale(300),
+    zIndex: 1,
+  },
 
-    submitText: {
-        color: 'white',
-        fontSize: moderateScale(20),
-        fontWeight: 'bold',
-    },
+  visionContainer: {
+    marginTop: verticalScale(20),
+    marginLeft: horizontalScale(25),
+    width: horizontalScale(300),
+  },
 
+  hearingContainer: {
+    marginTop: verticalScale(20),
+    marginLeft: horizontalScale(25),
+    width: horizontalScale(300),
+  },
+
+  // ============================================================================
+  // CHECKBOX STYLES
+  // ============================================================================
+
+  checkbox: {
+    marginTop: verticalScale(10),
+    borderWidth: 2,
+    borderColor: colors.border.primary,
+    borderRadius: borderRadius.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  checkboxLabel: {
+    color: colors.text.primary,
+    fontSize: moderateScale(20),
+    marginTop: verticalScale(10),
+    marginLeft: horizontalScale(10),
+  },
+
+  // ============================================================================
+  // BUTTON STYLES
+  // ============================================================================
+
+  submitContainer: {
+    marginTop: verticalScale(30),
+    width: '100%',
+    alignItems: 'center',
+  },
+
+  submitButton: {
+    backgroundColor: colors.background.primary,
+    borderWidth: 1,
+    borderColor: colors.border.primary,
+    borderRadius: borderRadius.sm,
+    width: horizontalScale(300),
+    height: verticalScale(40),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  submitText: {
+    color: colors.text.primary,
+    fontSize: moderateScale(typography.body.fontSize),
+    fontWeight: typography.button.fontWeight,
+  },
 });

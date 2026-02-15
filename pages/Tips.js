@@ -1,13 +1,14 @@
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, SectionList, Linking, useWindowDimensions, StatusBar, Platform, Image, Alert } from 'react-native';
+import { StyleSheet, Text, View, Pressable, FlatList, SectionList, Linking, useWindowDimensions, StatusBar, Platform, Image, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import {styles} from '../styles/Styles'
+import {styles} from '../styles/Styles';
+import { colors } from '../styles/theme';
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
 import { verticalScale, horizontalScale, moderateScale } from '../styles/Styles';
-import { FontAwesome } from '@expo/vector-icons'; 
+import { FontAwesome } from '@expo/vector-icons';
 import {products, hazardsDict, questions, important, roomQuestionNumbers, exclusions} from '../scripting/algorithm';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
@@ -127,16 +128,23 @@ export class Hazards extends React.Component {
                     sections={hazards}
                     keyExtractor={(item, index) => item + index}
                     renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.hazard} 
+                    <Pressable
+                        style={({ pressed }) => [
+                            styles.hazard,
+                            pressed && { opacity: 0.7 }
+                        ]}
                         onLongPress={() => markComplete(item.roomID, item.questionID)}
+                        accessibilityLabel={`${item['hazard']} in ${item.room}`}
+                        accessibilityRole="button"
+                        accessibilityHint="Long press to mark as complete"
                     >
                         <View style={styles.hazardLine}>
                             <View style={styles.hazardIconStyle} >
-                                <FontAwesome name={item['icon']} size={25} color="white" style={styles.hazardIcon} />
+                                <FontAwesome name={item['icon']} size={25} color={colors.text.primary} style={styles.hazardIcon} />
                             </View>
                             <Text style={styles.hazardText}>{item['hazard']}</Text>
                         </View>
-                    </TouchableOpacity>
+                    </Pressable>
                     )}
                     renderSectionHeader={({section: {importance}}) => <Text style={styles.tipSectionHeader}>{importance}</Text>}
                 />
@@ -212,8 +220,19 @@ const Products = () => {
             <SectionList
                 sections={tipsList}
                 renderItem={({item}) => {
+                    const importanceColor = item.importance == "high" ? colors.status.error : (item.importance == "medium" ? colors.status.warning : colors.status.success);
+                    const importanceText = item.importance == "high" ? "Very Important" : (item.importance == "medium" ? "Important" : "Good to Have");
                     return (
-                        <TouchableOpacity style={styles.tip} onPress={() => {Linking.openURL(item.link);}}>
+                        <Pressable
+                            style={({ pressed }) => [
+                                styles.tip,
+                                pressed && { opacity: 0.7, transform: [{ scale: 0.98 }] }
+                            ]}
+                            onPress={() => {Linking.openURL(item.link);}}
+                            accessibilityLabel={`${item.name}, ${importanceText}`}
+                            accessibilityRole="button"
+                            accessibilityHint="Opens product link in browser"
+                        >
                             <Image
                                 style={styles.tipImage}
                                 source={item.image}
@@ -221,9 +240,9 @@ const Products = () => {
                             <View style={styles.tipTextContainer}>
                                 <Text style={styles.tipText}>{item.name}</Text>
                                 <Text style={styles.tipDescription}>{item.description}</Text>
-                                <Text style={{color: item.importance == "high" ? "red" : (item.importance == "medium" ? "orange" : "green")}}>{item.importance == "high" ? "Very Important" : (item.importance == "medium" ? "Important" : "Good to Have")}</Text>
+                                <Text style={{color: importanceColor, fontWeight: 'bold'}}>{importanceText}</Text>
                             </View>
-                        </TouchableOpacity>
+                        </Pressable>
                     );
                 }}
                 renderSectionHeader={({section}) => <Text style={styles.tipSectionHeader}>{section.title}</Text>}
@@ -266,37 +285,37 @@ export default function Tips() {
     ]);
 
     return (
-        // <SafeAreaView style={{backgroundColor: '#1C1C1E', flex: 1,
+        // <SafeAreaView style={{backgroundColor: colors.background.primary, flex: 1,
         // flexDirection: 'column', }} edges={['top', 'left', 'right']}>
         <SafeAreaInsetsContext.Consumer>
         {insets => (
-        <View style={{backgroundColor: '#1C1C1E', flex: 1, paddingTop: insets.top}}>
-            {Platform.OS === 'android' && <StatusBar backgroundColor="#1C1C1E" barStyle="light-content" />}
+        <View style={{backgroundColor: colors.background.primary, flex: 1, paddingTop: insets.top}}>
+            {Platform.OS === 'android' && <StatusBar backgroundColor={colors.background.primary} barStyle="light-content" />}
             <TabView
                 navigationState={{ index, routes }}
                 renderScene={renderScene}
                 onIndexChange={setIndex}
                 initialLayout={{ width: layout.width }}
-                style={{backgroundColor: '#1C1C1E'}}
-                
+                style={{backgroundColor: colors.background.primary}}
+
                 renderTabBar={props => {
                     // Extract key and remaining props
                     const { key, ...tabBarProps } = props;
                     return (
-                        <TabBar 
+                        <TabBar
                             key={key}  // Pass key directly
                             {...tabBarProps}  // Spread remaining props
                             style={{
-                                backgroundColor: '#1C1C1E',
-                                color: 'white',
+                                backgroundColor: colors.background.primary,
+                                color: colors.text.primary,
                             }}
                             indicatorStyle={{
-                                backgroundColor: "#24a0ed",
+                                backgroundColor: colors.accent.primary,
                             }}
                         />
                     );
                 }}
-                
+
             />
             <ExpoStatusBar style="light" translucent={false} />
         </View>

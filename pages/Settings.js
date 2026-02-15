@@ -1,12 +1,14 @@
-import { StyleSheet, Text, View, TouchableOpacity, Button, Dimensions, FlatList, TextInput, Alert, ScrollView, Platform, StatusBar} from 'react-native';
+import { StyleSheet, Text, View, Pressable, Button, Dimensions, FlatList, TextInput, Alert, ScrollView, Platform, StatusBar} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import {styles} from '../styles/Styles'
-import {wstyles} from '../styles/WelcomeStyles'
+import {styles} from '../styles/Styles';
+import {wstyles} from '../styles/WelcomeStyles';
+import { colors } from '../styles/theme';
+import formStyles, { getInputContainerStyle, errorMessage } from '../styles/formStyles';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { StatusBar as ExpoStatusBar} from 'expo-status-bar';
-import { FontAwesome } from '@expo/vector-icons'; 
+import { FontAwesome } from '@expo/vector-icons';
 import React, { useState, useEffect, BackHandler } from 'react';
 import { verticalScale, horizontalScale, moderateScale } from '../styles/Styles';
 import {fetchRooms, addRoom, deleteRoomData} from '../scripting/rooms';
@@ -28,6 +30,7 @@ export default function Settings({navigation}) {
     const [hearing, setHearing] = useState(false);
 
     const [ageError, setAgeError] = useState(null);
+    const [ageFocused, setAgeFocused] = useState(false);
 
     const insets = useSafeAreaInsets();
 
@@ -53,23 +56,35 @@ export default function Settings({navigation}) {
     }, []);
 
         return (
-            <View style={[styles.container, {"backgroundColor": "#1C1C1E", paddingTop: insets.top}]}>
-                {Platform.OS === 'android' && <StatusBar backgroundColor="#1C1C1E" barStyle="dark-content" />}
+            <View style={[styles.container, {"backgroundColor": colors.background.primary, paddingTop: insets.top}]}>
+                {Platform.OS === 'android' && <StatusBar backgroundColor={colors.background.primary} barStyle="light-content" />}
                 <ScrollView nestedScrollEnabled={true}>
                     <Text style={styles.header}>Settings</Text>
                     <Text style={styles.subheader}>Edit your preferences and personal information</Text>
                         <View style={wstyles.ageContainer}>
-                            <Text style={wstyles.ageLabel}>Age</Text>
-                            <TextInput 
-                            style={wstyles.ageInput} 
-                            placeholder="Enter your age" 
-                            placeholderTextColor="white"
-                            keyboardType="numeric"
-                            onChangeText={(text) => {setAge(text)}}
-                            value={age}
+                            <Text style={[wstyles.ageLabel, ageError && { color: colors.status.error }]}>Age</Text>
+                            <TextInput
+                                style={[
+                                    wstyles.ageInput,
+                                    ageFocused && { borderColor: colors.border.focus, borderWidth: 2 },
+                                    ageError && { borderColor: colors.border.error, borderWidth: 2 }
+                                ]}
+                                placeholder="Enter your age"
+                                placeholderTextColor={colors.text.secondary}
+                                keyboardType="numeric"
+                                onChangeText={(text) => {
+                                    setAge(text);
+                                    if (text.trim() !== '') setAgeError(null);
+                                }}
+                                value={age}
+                                onFocus={() => setAgeFocused(true)}
+                                onBlur={() => setAgeFocused(false)}
+                                accessibilityLabel="Age input"
                             />
                             {!!ageError && (
-                                <Text style={{ color: "red" }}>{ageError}</Text>
+                                <View style={errorMessage.container}>
+                                    <Text style={errorMessage.text}>{ageError}</Text>
+                                </View>
                             )}
                         </View>
                         <View style={wstyles.mobilityContainer}>
@@ -83,58 +98,87 @@ export default function Settings({navigation}) {
                                 setItems={setItems}
                                 zIndex={5000}
                                 style={{
-                                    backgroundColor: "#1C1C1E",
-                                    borderColor: "white",
-                                    color: "white",
+                                    backgroundColor: colors.background.primary,
+                                    borderColor: colors.border.primary,
+                                    color: colors.text.primary,
                                 }}
                                 textStyle={{
-                                    color: "white",
+                                    color: colors.text.primary,
                                 }}
                                 dropDownContainerStyle={{
-                                    backgroundColor: "#1C1C1E",
-                                    borderColor: "white",
-                                    color: "white",
+                                    backgroundColor: colors.background.primary,
+                                    borderColor: colors.border.primary,
+                                    color: colors.text.primary,
                                 }}
                                 listMode='SCROLLVIEW'
-                                
+                                accessibilityLabel="Mobility selector"
                             />
                         </View>
                         <View style={wstyles.visionContainer}>
                             <Text style={wstyles.ageLabel}>Vision</Text>
-                            <TouchableOpacity style={{alignItems: 'center', flexDirection: 'row'}} onPress={() => {setVision(!vision)}}>
+                            <Pressable
+                                style={({ pressed }) => [
+                                    {alignItems: 'center', flexDirection: 'row'},
+                                    pressed && { opacity: 0.7 }
+                                ]}
+                                onPress={() => {setVision(!vision)}}
+                                accessibilityLabel="I have trouble seeing"
+                                accessibilityRole="checkbox"
+                                accessibilityState={{ checked: vision }}
+                            >
                                 <Checkbox
                                     style={wstyles.checkbox}
                                     value={vision}
                                     onValueChange={(newValue) => {setVision(newValue)}}
+                                    color={vision ? colors.accent.primary : undefined}
                                 />
                                 <Text style={wstyles.checkboxLabel}>I have trouble seeing</Text>
-                            </TouchableOpacity>
+                            </Pressable>
                         </View>
                         <View style={wstyles.hearingContainer}>
                             <Text style={wstyles.ageLabel}>Hearing</Text>
-                            <TouchableOpacity style={{alignItems: 'center', flexDirection: 'row'}} onPress={() => setHearing(!hearing)}>
+                            <Pressable
+                                style={({ pressed }) => [
+                                    {alignItems: 'center', flexDirection: 'row'},
+                                    pressed && { opacity: 0.7 }
+                                ]}
+                                onPress={() => setHearing(!hearing)}
+                                accessibilityLabel="I have trouble hearing"
+                                accessibilityRole="checkbox"
+                                accessibilityState={{ checked: hearing }}
+                            >
                                 <Checkbox
                                     style={wstyles.checkbox}
                                     value={hearing}
                                     onValueChange={(newValue) => {setHearing(newValue)}}
+                                    color={hearing ? colors.accent.primary : undefined}
                                 />
                                 <Text style={wstyles.checkboxLabel}>I have trouble hearing</Text>
-                            </TouchableOpacity>
+                            </Pressable>
                         </View>
                         <View style={wstyles.submitContainer}>
-                            <TouchableOpacity style={wstyles.submitButton} onPress={() => {
-                                if (age == '' || age == null || age == undefined || age.trim() == '') {
-                                    setAgeError("Please enter your age");
-                                    return;
-                                } else {
-                                    setAgeError(null);
-                                    const personalInfo = {age: age , mobility: value, vision: vision, hearing: hearing};
-                                    AsyncStorage.setItem('personalInfo', JSON.stringify(personalInfo));
-                                    Alert.alert("Personal Information Saved", "Your information has been updated.");
-                                }
-                            }}>
+                            <Pressable
+                                style={({ pressed }) => [
+                                    wstyles.submitButton,
+                                    pressed && { opacity: 0.7, borderColor: colors.accent.primary }
+                                ]}
+                                onPress={() => {
+                                    if (age == '' || age == null || age == undefined || age.trim() == '') {
+                                        setAgeError("Please enter your age");
+                                        return;
+                                    } else {
+                                        setAgeError(null);
+                                        const personalInfo = {age: age , mobility: value, vision: vision, hearing: hearing};
+                                        AsyncStorage.setItem('personalInfo', JSON.stringify(personalInfo));
+                                        Alert.alert("Personal Information Saved", "Your information has been updated.");
+                                    }
+                                }}
+                                accessibilityLabel="Save"
+                                accessibilityRole="button"
+                                accessibilityHint="Save your personal information changes"
+                            >
                                 <Text style={wstyles.submitText}>Save</Text>
-                            </TouchableOpacity>
+                            </Pressable>
                         </View>
                         {/* <View style={wstyles.submitContainer}>
                             <TouchableOpacity style={wstyles.submitButton} onPress={() => {
