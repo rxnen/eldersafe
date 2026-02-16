@@ -207,12 +207,13 @@ const HazardItem = ({ item, onStatusChange }) => {
                 <View style={styles.hazardCardContent}>
                     <Text style={styles.hazardCardText}>{item.hazard}</Text>
                     <View style={[styles.hazardStatusBadge, { backgroundColor: config.bgColor }]}>
-                        <MaterialIcons
-                            name={config.icon}
-                            size={14}
-                            color={config.color}
-                            style={styles.hazardStatusIcon}
-                        />
+                        <View style={styles.hazardStatusIcon}>
+                            <MaterialIcons
+                                name={config.icon}
+                                size={14}
+                                color={config.color}
+                            />
+                        </View>
                         <Text style={[styles.hazardStatusText, { color: config.color }]}>
                             {config.label}
                         </Text>
@@ -275,6 +276,43 @@ const HazardItem = ({ item, onStatusChange }) => {
     );
 };
 
+// Loading Skeleton Component
+const LoadingSkeleton = () => {
+    return (
+        <View style={styles.hazardContainer}>
+            <View style={styles.progressRingContainer}>
+                <View style={[styles.progressOuterRing, { backgroundColor: colors.background.secondary, borderRadius: 100 }]} />
+            </View>
+            <View style={styles.progressSummaryStatsContainer}>
+                <View style={styles.progressStatsContainer}>
+                    {[1, 2, 3].map((i) => (
+                        <View
+                            key={i}
+                            style={[
+                                styles.progressStatCard,
+                                { height: verticalScale(70), backgroundColor: colors.background.secondary }
+                            ]}
+                        />
+                    ))}
+                </View>
+            </View>
+            <View style={{ paddingHorizontal: horizontalScale(20), marginTop: verticalScale(20) }}>
+                {[1, 2, 3].map((i) => (
+                    <View
+                        key={i}
+                        style={{
+                            height: verticalScale(80),
+                            backgroundColor: colors.background.secondary,
+                            borderRadius: moderateScale(10),
+                            marginBottom: verticalScale(12),
+                        }}
+                    />
+                ))}
+            </View>
+        </View>
+    );
+};
+
 // Main Hazards Component (converted to functional)
 const Hazards = () => {
     const [hazards, setHazards] = useState([]);
@@ -283,6 +321,7 @@ const Hazards = () => {
     const [refreshKey, setRefreshKey] = useState(0);
     const [activeFilter, setActiveFilter] = useState('all');
     const [isStatsStuck, setIsStatsStuck] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const isFocused = useIsFocused();
 
     // Approximate height of the progress ring (180px ring + margins)
@@ -297,6 +336,12 @@ const Hazards = () => {
         if (!isFocused) return;
 
         const loadHazards = async () => {
+            // Only show loading if we don't have data yet
+            const hasData = hazards.length > 0 || roomList.length > 0;
+            if (!hasData) {
+                setIsLoading(true);
+            }
+
             try {
                 const items = await AsyncStorage.multiGet(["myRooms", "personalInfo"]);
                 const rooms = JSON.parse(items[0][1]);
@@ -307,6 +352,7 @@ const Hazards = () => {
 
                 if (!rooms || rooms.length === 0) {
                     setHazards([]);
+                    setIsLoading(false);
                     return;
                 }
 
@@ -364,9 +410,19 @@ const Hazards = () => {
 
                 const filteredHazards = allHazards.filter(section => section.data.length > 0);
                 setHazards(filteredHazards);
+
+                // Small delay to ensure smooth rendering on initial load
+                if (isLoading) {
+                    setTimeout(() => {
+                        setIsLoading(false);
+                    }, 100);
+                } else {
+                    setIsLoading(false);
+                }
             } catch (error) {
                 console.error('Error loading hazards:', error);
                 setHazards([]);
+                setIsLoading(false);
             }
         };
 
@@ -408,6 +464,10 @@ const Hazards = () => {
     };
 
     const stats = useHazardStats(roomList, personalInfo);
+
+    if (isLoading) {
+        return <LoadingSkeleton />;
+    }
 
     return (
         <View style={styles.hazardContainer}>
@@ -466,16 +526,22 @@ const Hazards = () => {
 const HazardTimeline = ({ isActive }) => {
     const [timelineEntries, setTimelineEntries] = useState([]);
     const [refreshKey, setRefreshKey] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
     const isFocused = useIsFocused();
 
     useEffect(() => {
         if (!isFocused || !isActive) return;
 
         const loadTimeline = async () => {
+            // Only show loading if we don't have data yet
+            if (timelineEntries.length === 0) {
+                setIsLoading(true);
+            }
             try {
                 const currentRooms = await AsyncStorage.getItem('myRooms');
                 if (!currentRooms) {
                     setTimelineEntries([]);
+                    setIsLoading(false);
                     return;
                 }
 
@@ -500,9 +566,15 @@ const HazardTimeline = ({ isActive }) => {
                 // Sort by timestamp (most recent first) and limit to 20
                 allEntries.sort((a, b) => b.timestamp - a.timestamp);
                 setTimelineEntries(allEntries.slice(0, 20));
+                if (isLoading) {
+                    setTimeout(() => setIsLoading(false), 100);
+                } else {
+                    setIsLoading(false);
+                }
             } catch (error) {
                 console.error('Error loading timeline:', error);
                 setTimelineEntries([]);
+                setIsLoading(false);
             }
         };
 
@@ -598,6 +670,60 @@ const HazardTimeline = ({ isActive }) => {
         );
     };
 
+    if (isLoading) {
+        return (
+            <View style={styles.timelineContainer}>
+                {[1, 2, 3, 4, 5].map((i) => (
+                    <View
+                        key={i}
+                        style={{
+                            flexDirection: 'row',
+                            marginHorizontal: horizontalScale(20),
+                            marginBottom: verticalScale(16),
+                        }}
+                    >
+                        <View
+                            style={{
+                                width: horizontalScale(40),
+                                height: verticalScale(40),
+                                borderRadius: moderateScale(20),
+                                backgroundColor: colors.background.secondary,
+                                marginRight: horizontalScale(12),
+                            }}
+                        />
+                        <View style={{ flex: 1 }}>
+                            <View
+                                style={{
+                                    height: verticalScale(14),
+                                    backgroundColor: colors.background.secondary,
+                                    borderRadius: moderateScale(4),
+                                    marginBottom: verticalScale(8),
+                                    width: '40%',
+                                }}
+                            />
+                            <View
+                                style={{
+                                    height: verticalScale(16),
+                                    backgroundColor: colors.background.secondary,
+                                    borderRadius: moderateScale(4),
+                                    marginBottom: verticalScale(8),
+                                }}
+                            />
+                            <View
+                                style={{
+                                    height: verticalScale(12),
+                                    backgroundColor: colors.background.secondary,
+                                    borderRadius: moderateScale(4),
+                                    width: '60%',
+                                }}
+                            />
+                        </View>
+                    </View>
+                ))}
+            </View>
+        );
+    }
+
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <View style={styles.timelineContainer}>
@@ -656,8 +782,15 @@ const HazardTimeline = ({ isActive }) => {
 
 const Products = () => {
     const [tipsList, setTipsList] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    AsyncStorage.multiGet(["myRooms", "personalInfo"]).then((items) => {
+    useEffect(() => {
+        const loadProducts = async () => {
+            // Only show loading on initial load
+            if (tipsList.length === 0) {
+                setIsLoading(true);
+            }
+            const items = await AsyncStorage.multiGet(["myRooms", "personalInfo"]);
         const tips = [];
         const roomList = JSON.parse(items[0][1]);
         const personalInfo = JSON.parse(items[1][1]);
@@ -713,7 +846,34 @@ const Products = () => {
                 }
             }
             setTipsList(tips);
-        });
+            if (isLoading) {
+                setTimeout(() => setIsLoading(false), 100);
+            } else {
+                setIsLoading(false);
+            }
+        };
+
+        loadProducts();
+    }, []);
+
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1, paddingTop: verticalScale(20), paddingHorizontal: horizontalScale(20) }}>
+                {[1, 2, 3, 4].map((i) => (
+                    <View
+                        key={i}
+                        style={{
+                            height: verticalScale(100),
+                            backgroundColor: colors.background.secondary,
+                            borderRadius: moderateScale(10),
+                            marginBottom: verticalScale(12),
+                        }}
+                    />
+                ))}
+            </View>
+        );
+    }
+
     return (
         <View>
             {tipsList.length == 0 && <Text style={styles.noProductsText}>You currently have no product suggestions</Text>}

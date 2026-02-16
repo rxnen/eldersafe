@@ -723,12 +723,15 @@ export const styles = StyleSheet.create({
   hazardCardContent: {
     flex: 1,
     marginLeft: horizontalScale(16),
+    justifyContent: 'center',
   },
 
   hazardCardText: {
     fontSize: moderateScale(16),
     color: colors.text.primary,
-    marginBottom: verticalScale(4),
+    marginBottom: verticalScale(6),
+    lineHeight: moderateScale(22),
+    minHeight: moderateScale(22),
   },
 
   hazardStatusBadge: {
@@ -738,15 +741,20 @@ export const styles = StyleSheet.create({
     paddingHorizontal: horizontalScale(8),
     borderRadius: moderateScale(borderRadius.sm),
     alignSelf: 'flex-start',
+    minHeight: verticalScale(26),
+    height: verticalScale(26),
   },
 
   hazardStatusIcon: {
     marginRight: horizontalScale(4),
+    width: horizontalScale(16),
+    height: verticalScale(16),
   },
 
   hazardStatusText: {
     fontSize: moderateScale(12),
     fontWeight: '600',
+    lineHeight: moderateScale(16),
   },
 
   hazardActionsContainer: {
