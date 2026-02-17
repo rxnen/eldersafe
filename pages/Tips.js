@@ -61,10 +61,10 @@ const useHazardStats = (roomList, personalInfo) => {
 // Progress Ring Component (scrollable)
 const ProgressRing = ({ stats }) => {
     const gradientColors = stats.percentage >= 75
-        ? ['#4CAF50', '#81C784']
+        ? ['#2E7D32', '#81C784']
         : stats.percentage >= 50
-            ? ['#FF9800', '#FFB74D']
-            : ['#F44336', '#EF5350'];
+            ? ['#EF6C00', '#FFB74D']
+            : ['#C62828', '#FF8A80'];
 
     return (
         <View style={styles.progressRingContainer}>
@@ -158,7 +158,7 @@ const HazardItem = ({ item, onStatusChange }) => {
                 },
                 {
                     text: "Addressed",
-                    onPress: () => onStatusChange(item.roomID, item.questionID, 'addressed', item.hazard)
+                    onPress: () => onStatusChange(item.roomID, item.questionID, 'addressed', item.status, item.hazard)
                 }
             ],
             { cancelable: false }
@@ -230,7 +230,7 @@ const HazardItem = ({ item, onStatusChange }) => {
                             pressed && { opacity: 0.7 }
                         ]}
                         onPress={() => {
-                            onStatusChange(item.roomID, item.questionID, 'not_addressed', item.hazard);
+                            onStatusChange(item.roomID, item.questionID, 'not_addressed', item.status, item.hazard);
                             setExpanded(false);
                         }}
                     >
@@ -246,7 +246,7 @@ const HazardItem = ({ item, onStatusChange }) => {
                             pressed && { opacity: 0.7 }
                         ]}
                         onPress={() => {
-                            onStatusChange(item.roomID, item.questionID, 'in_progress', item.hazard);
+                            onStatusChange(item.roomID, item.questionID, 'in_progress', item.status, item.hazard);
                             setExpanded(false);
                         }}
                     >
@@ -262,7 +262,7 @@ const HazardItem = ({ item, onStatusChange }) => {
                             pressed && { opacity: 0.7 }
                         ]}
                         onPress={() => {
-                            onStatusChange(item.roomID, item.questionID, 'addressed', item.hazard);
+                            onStatusChange(item.roomID, item.questionID, 'addressed', item.status, item.hazard);
                             setExpanded(false);
                         }}
                     >
@@ -450,7 +450,8 @@ const Hazards = () => {
         setActiveFilter(filter);
     };
 
-    const handleStatusChange = async (roomID, questionID, newStatus, hazardText) => {
+    const handleStatusChange = async (roomID, questionID, newStatus, oldStatus, hazardText) => {
+        if (oldStatus === newStatus) return; // No change needed
         const success = await updateHazardStatus(roomID, questionID, newStatus, hazardText);
         if (success) {
             // Force re-render

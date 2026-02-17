@@ -26,7 +26,8 @@ export function RoomReport({route, navigation}) {
 
     const recList = JSON.parse(JSON.stringify(hazardsDict[roomType]));
 
-    for (let i = 0; i < answers.length; i++) {
+    for (let i = answers.length - 1; i >= 0; i--) {
+        console.log(answers[i]);
         recList.splice(answers[i], 1);
     }
 
@@ -37,7 +38,7 @@ export function RoomReport({route, navigation}) {
     // Calculate statistics
     const totalChecks = questions[roomType].length;
     const checksCompleted = answers.length;
-    const hazardsFound = recList.length;
+    const hazardsFound = totalChecks - checksCompleted;
     const safetyPercentage = Math.round((checksCompleted / totalChecks) * 100);
 
     return (
