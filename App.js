@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { ExpoStatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ActivityIndicator, StatusBar } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons'; 
+import { FontAwesome } from '@expo/vector-icons';
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { verticalScale, horizontalScale, moderateScale } from './styles/Styles';
+import { colors, typography } from './styles/theme';
 import * as SplashScreen from 'expo-splash-screen';
 import Aptabase, { trackEvent } from "@aptabase/react-native";
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context';
 
-import {styles} from './styles/Styles'
+import {styles} from './styles/Styles';
 import Rooms, {RoomSelect, RoomEditor, RoomAdded, RoomReport} from './pages/Rooms';  
 import Tips from './pages/Tips';
 import Home from './pages/Home';
@@ -29,7 +30,7 @@ Aptabase.init("A-US-5290383727");
 
 function HomeScreens({navigation, route}) {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false, contentStyle: {backgroundColor: '#1C1C1E'}, navigationBarColor: "#1C1C1E"}} >
+    <Stack.Navigator screenOptions={{ headerShown: false, contentStyle: {backgroundColor: colors.background.primary}, navigationBarColor: colors.background.primary}} >
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="FirstLoad" component={FirstLoad} options={{gestureEnabled: false}} />
     </Stack.Navigator>
@@ -38,7 +39,7 @@ function HomeScreens({navigation, route}) {
 
 function RoomScreens() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false, contentStyle: {backgroundColor: '#1C1C1E'}, navigationBarColor: "#1C1C1E"}} >
+    <Stack.Navigator screenOptions={{ headerShown: false, contentStyle: {backgroundColor: colors.background.primary}, navigationBarColor: colors.background.primary}} >
       <Stack.Screen name="Rooms" component={Rooms} />
       <Stack.Screen name="RoomSelection" component={RoomSelect} />
       <Stack.Screen name="RoomEditor" component={RoomEditor} />
@@ -53,15 +54,15 @@ function BottomNav() {
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        tabBarActiveTintColor: 'white',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: colors.text.primary,
+        tabBarInactiveTintColor: colors.text.secondary,
         headerShown: false,
-        backgroundColor: '#1C1C1E',
-        tabBarStyle: { backgroundColor: '#1C1C1E', borderTopWidth: 0, elevation: 0 }
+        backgroundColor: colors.background.primary,
+        tabBarStyle: { backgroundColor: colors.background.primary, borderTopWidth: 0, elevation: 0 }
       }}
-      sceneContainerStyle={{ backgroundColor: '#1C1C1E' }}
-      navigationBarColor="#1C1C1E"
-      
+      sceneContainerStyle={{ backgroundColor: colors.background.primary }}
+      navigationBarColor={colors.background.primary}
+
     >
       <Tab.Screen
         name="HomeScreens"
@@ -93,7 +94,7 @@ function BottomNav() {
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="lightbulb-o" color={color} size={size} />
           ),
-          navigationBarColor: "#1C1C1E",
+          navigationBarColor: colors.background.primary,
           headerShown: false
         }}
         initialParams = {{goTo: 0}}
@@ -107,7 +108,7 @@ function BottomNav() {
             <FontAwesome name="gear" color={color} size={size} />
           ),
           headerShown: false,
-          navigationBarColor: "#1C1C1E",
+          navigationBarColor: colors.background.primary,
         }}
       />
     </Tab.Navigator>
@@ -119,22 +120,22 @@ const introStyles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#1C1C1E',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: horizontalScale(20),
   },
 
   title: {
     fontSize: moderateScale(30),
-    color: 'white',
+    color: colors.text.primary,
     textAlign: 'center',
     marginTop: verticalScale(20),
     marginBottom: verticalScale(20),
-    fontWeight: 'bold',
+    fontWeight: typography.h1.fontWeight,
   },
 
   text: {
-    fontSize: moderateScale(20),
-    color: 'white',
+    fontSize: moderateScale(typography.body.fontSize),
+    color: colors.text.primary,
     textAlign: 'center',
     marginBottom: verticalScale(20),
   },
@@ -175,7 +176,11 @@ const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#1C1C1E',
+    background: colors.background.primary,
+    card: colors.background.secondary,
+    text: colors.text.primary,
+    border: colors.border.secondary,
+    notification: colors.accent.primary,
   },
 }
 
@@ -248,7 +253,7 @@ export default class App extends React.Component {
  
       return (
         <SafeAreaProvider>
-          <NavigationContainer theme={theme} style={{ backgroundColor: '#1C1C1E' }}>
+          <NavigationContainer theme={theme} style={{ backgroundColor: colors.background.primary }}>
             <BottomNav />
           </NavigationContainer>
         </SafeAreaProvider>

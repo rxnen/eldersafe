@@ -1,581 +1,869 @@
-import { Platform, StyleSheet, Dimensions } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
+import { colors, spacing, shadows, borderRadius, typography } from './theme';
+import { horizontalScale, verticalScale, moderateScale } from './scaling';
 
-const { width, height } = Dimensions.get('window');
-
-const guidelineBaseWidth = 375;
-const guidelineBaseHeight = 812;
-
-export const horizontalScale = (size) => (width / guidelineBaseWidth) * size;
-export const verticalScale = (size) => (height / guidelineBaseHeight) * size;
-export const moderateScale = (size, factor = 0.5) => size + (horizontalScale(size) - size) * factor;
+export { horizontalScale, verticalScale, moderateScale };
 
 export const styles = StyleSheet.create({
 
-  // Basic Styles
-    container: {
-      flex: 1,
-      flexDirection: 'column', 
-      justifyContent: 'space-between',
-      backgroundColor: '#1C1C1E',
-    },
-
-    header: {
-      // flex: 1, 
-      fontSize: 35, 
-      fontWeight: 'bold',
-      color: 'white',
-      alignSelf: 'flex-start',
-      marginLeft: horizontalScale(20),
-      marginTop: verticalScale(10),
-    },
-
-    subheader: {
-      // flex: 1,
-      marginTop: verticalScale(10),
-      marginLeft: horizontalScale(20),
-      marginRight: horizontalScale(20),
-      fontSize: moderateScale(20),
-      color: 'white',
-      alignSelf: 'flex-start',
-    },
-  
-    // Home Page Styles
-    outerRing: {
-      width: 220,
-      height: 220,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: verticalScale(40),
-    },
-    gradientRing: {
-      width: 200,
-      height: 200,
-      borderRadius: 100,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    scoreContainer: {
-      width: 180,
-      height: 180,
-      borderRadius: 90,
-      backgroundColor: '#1C1C1E',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    score: {
-      fontSize: moderateScale(50),
-      fontWeight: 'bold',
-      color: 'white',
-    },
-    scoreLabel: {
-      fontSize: moderateScale(20),
-      marginTop: verticalScale(20),
-      marginHorizontal: horizontalScale(20),
-    },
-
-    scoreLabelText: {
-      fontSize: moderateScale(20),
-      color: 'white',
-      textAlign: 'center',
-    },
-
-    scoreLabelSubtext: {
-      fontSize: moderateScale(15),
-      marginTop: verticalScale(10),
-      marginHorizontal: horizontalScale(20),
-      color: 'lightblue',
-      textAlign: 'center',
-    },
-
-    dashboard: { 
-      flex: 1,
-      flexDirection: 'row',
-      marginTop: verticalScale(50),
-      width: '100%',
-      justifyContent: 'space-evenly',
-    },
-
-    dashboardButton: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#2C2C2E',
-      borderRadius: moderateScale(20),
-      marginBottom: 3.5,
-      marginRight: 15,
-      marginLeft: 15,
-      paddingVertical: verticalScale(15),
-      paddingHorizontal: horizontalScale(10),
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.2,
-      shadowRadius: 5,
-      elevation: 5, 
-    },
-
-    dashboardNumber: {
-      fontSize: moderateScale(50),
-      fontWeight: 'bold',
-      color: 'white',
-    },
-
-    dashboardText: {
-      fontSize: moderateScale(20),
-      color: 'white',
-      textAlign: 'center',
-    },
-
-    
-    // Rooms Page Styles
-
-    roomHeaderContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center', 
-    },
-
-    plus: {
-      fontSize: moderateScale(35),
-      color: 'white',
-      marginTop: verticalScale(10),
-      marginRight: horizontalScale(20),
-    },
-
-    noRooms: {
-        fontSize: moderateScale(20),
-        textAlign: 'center',
-        color: 'white',
-        marginTop: 'auto',
-        marginBottom: 'auto',
-
-    },
-
-    room: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      height: verticalScale(100),
-      alignItems: 'center',
-      marginRight: horizontalScale(12),
-      marginLeft: horizontalScale(12),
-      paddingLeft: horizontalScale(16),
-      paddingRight: horizontalScale(16),
-      paddingTop: verticalScale(12),
-      paddingBottom: verticalScale(12),
-      marginBottom: verticalScale(12),
-      backgroundColor: '#1E1E1E',
-      borderRadius: moderateScale(10),
-      color: 'white',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.2,
-      shadowRadius: 5,
-      elevation: 5,
-    },
-
-    roomText: {
-      fontSize: moderateScale(20),
-      color: 'white',
-    },
-
-    currentRooms: {
-      flex: 1,
-      flexDirection: 'column',
-      width: '100%',
-      marginTop: verticalScale(20),
-    },
-
-    roomFooter: {
-      marginTop: verticalScale(20),
-    },
-
-    roomFooterText: {
-      textAlign: 'center',
-      color: 'white',
-      fontSize: moderateScale(20),
-      marginTop: verticalScale(12),
-      marginBottom: verticalScale(30),
-      textDecorationLine: 'underline',
-    },
-
-    roomHeaderCont: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#1C1C1E',
-      width: '100%',
-      borderBottomWidth: 1,
-      borderBottomColor: '#24a0ed',
-    },
-
-    roomHeader: {
-      position: 'absolute',
-      alignItems: 'center',
-      fontSize: moderateScale(25),
-      fontWeight: 'bold',
-      color: 'white',
-    },
-
-    roomHeaderText: {
-      color: 'white',
-      fontWeight: 'bold',
-      fontSize: moderateScale(25),
-      textAlign: 'center',
-      marginVertical: verticalScale(10),
-    },
-
-    backButton: {
-      position: 'absolute',
-      left: 0,
-      marginLeft: horizontalScale(10),
-      marginTop: verticalScale(10),
-    },
-
-    saveButton: {
-      position: 'absolute',
-      right: 0,
-      marginRight: horizontalScale(10),
-      marginTop: verticalScale(10),
-    },
-
-    saveText: {
-      fontSize: moderateScale(20),
-      fontWeight: 'bold',
-    },
-
-    inputHeader: {
-      fontSize: moderateScale(20),
-      fontWeight: 'bold',
-      textAlign: 'center',
-      marginLeft: horizontalScale(25),
-      marginRight: horizontalScale(25),
-      marginTop: verticalScale(20),
-      marginBottom: verticalScale(20),
-      color: 'white',
-    },
-
-    inputContainer: {
-      width: '80%',
-      height: verticalScale(40),
-      marginHorizontal: "10%",
-      marginTop: verticalScale(20),
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#2C2C2E',
-      borderRadius: 8,
-      borderBottomLeftRadius: 0,
-      borderBottomRightRadius: 0,
-    },
-
-    input: {
-      fontSize: moderateScale(18),
-      width: '100%',
-      height: '100%',
-      textAlign: 'left',
-      // paddingVertical: verticalScale(8),
-      paddingLeft: horizontalScale(10),
-      borderBottomColor: '#24a0ed',
-      borderBottomWidth: 1,
-      color: 'white',
-    },
-
-    assessment: {
-      flex: 1,
-      flexDirection: 'column',
-      marginTop: verticalScale(20),
-      width: '100%',
-    },
-
-    assessmentText: {
-      fontSize: moderateScale(20),
-      width: '60%',
-      color: 'white',
-    },
-
-    assessmentItem: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginRight: '10%',
-      marginLeft: '10%',
-      marginTop: verticalScale(10),
-      marginBottom: verticalScale(10)
-    },
-
-    assessmentCheckbox: {
-      width: horizontalScale(30),
-      height: verticalScale(30),
-      borderWidth: 2,
-      borderColor: 'white',
-      borderRadius: 5,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-
-    assessmentButton: {
-      backgroundColor: '#1C1C1E',
-      borderWidth: 1,
-      borderColor: 'white',
-      borderRadius: 5,
-      width: '80%',
-      height: verticalScale(40),
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: verticalScale(20),
-    },
-
-    assessmentButtonText: {
-      color: 'white',
-      fontSize: moderateScale(20),
-      fontWeight: 'bold',
-    },
-
-    roomAddedContainer: {
-      width: '100%',
-      height: '100%',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-
-    roomAddedHeader: {
-      fontSize: moderateScale(40),
-      fontWeight: 'bold',
-      textAlign: 'center',
-      color: 'white',
-      marginBottom: '10%',
-    },
-
-    roomAddedText: {
-      fontSize: moderateScale(20),
-      textAlign: 'center',
-      color: 'white',
-      marginTop: '10%',
-    },
-
-    roomAddedButton: {
-      backgroundColor: '#1C1C1E',
-      borderWidth: 1,
-      borderColor: 'white',
-      borderRadius: 5,
-      width: '80%',
-      height: verticalScale(40),
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: verticalScale(20),
-    },
-
-    roomAddedButtonText: {
-      color: 'white',
-      fontSize: moderateScale(20),
-      fontWeight: 'bold',
-    },
-
-    reportHeader: {
-      fontSize: moderateScale(25),
-      fontWeight: 'bold',
-      textAlign: 'center',
-      color: 'white',
-      marginTop: verticalScale(30),
-    },
-
-    reportItem: {
-      marginLeft: horizontalScale(25),
-      marginRight: horizontalScale(25),
-      marginTop: verticalScale(25),
-      marginBottom: verticalScale(5),
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      width: '80%',
-    },
-
-    reportText: {
-      fontSize: moderateScale(20),
-      textAlign: 'left',
-      color: 'white',
-      marginLeft: horizontalScale(25),
-    },
-
-    reportButtons: {
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '100%',
-      marginTop: verticalScale(20),
-    },
-
-    reportOK: {
-      backgroundColor: '#1C1C1E',
-      borderWidth: 1,
-      borderColor: 'white',
-      borderRadius: 5,
-      height: verticalScale(40),
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginLeft: horizontalScale(25),
-      marginRight: horizontalScale(25),
-      marginTop: verticalScale(30),
-
-      width: '80%',
-      alignSelf: 'center',
-    },
-
-    reportOKText: {
-      color: 'white',
-      fontSize: moderateScale(20),
-      fontWeight: 'bold',
-    },
-
-    // Tips Page Styles
-
-    tipsList: {
-      width: '100%',
-      marginTop: verticalScale(20),
-    },
-
-    noProductsText: {
-      fontSize: moderateScale(20),
-      textAlign: 'center',
-      color: 'white',
-      marginTop: '80%',
-      marginHorizontal: horizontalScale(25),
-    },
-
-    tipSectionHeader: {
-      fontSize: moderateScale(25),
-      fontWeight: 'bold',
-      backgroundColor: '#1C1C1E',
-      color: 'white',
-      marginLeft: '5%',
-      paddingTop: verticalScale(15),
-    },
-
-    tip: {
-      width: '80%',   
-      marginTop: verticalScale(5),
-      marginBottom: verticalScale(5),
-      borderRadius: 10,
-      backgroundColor: '#1C1C1E',
-      padding: horizontalScale(20),
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-
-    tipImage: {
-      width: horizontalScale(80),
-      height: verticalScale(80),
-      borderRadius: 5,
-    },
-
-    tipTextContainer: {
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      marginLeft: horizontalScale(20),
-    },
-
-    tipText: {
-      fontSize: moderateScale(20),
-      color: 'white',
-      fontWeight: 'bold',
-    },
-
-    tipDescription: {
-      fontSize: moderateScale(15),
-      color: 'white',
-      marginBottom: verticalScale(10),
-    },
-
-    tipImportance: {
-      fontSize: moderateScale(15),
-      color: 'white',
-    },
-
-    affiliateNote: {
-      fontSize: moderateScale(15),
-      color: 'white',
-      marginTop: verticalScale(10),
-      marginBottom: verticalScale(20),
-      marginLeft: horizontalScale(20),
-    },
-
-    hazardContainer: {
-      width: '100%',
-      height: '95%',
-      marginTop: verticalScale(20),
-      marginBottom: verticalScale(40),
-      borderRadius: 10,
-      backgroundColor: '#1C1C1E',
-    },
-
-    hazardHeader: {
-      fontSize: moderateScale(25),
-      fontWeight: 'bold',
-      marginLeft: horizontalScale(25),
-      marginBottom: verticalScale(10),
-      color: 'white',
-    },
-
-    hazard: {
-      marginTop: verticalScale(10),
-      marginBottom: verticalScale(10),
-      marginLeft: horizontalScale(25),
-      marginRight: horizontalScale(25),
-    },
-
-    hazardLine: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      width: '80%'
-    },
-
-    hazardIconStyle: {
-      width: horizontalScale(75),
-      color: 'white',
-    },
-
-    hazardIcon: {
-      marginLeft: horizontalScale(20),
-      marginRight: horizontalScale(20),
-    },
-
-    hazardText: {
-      fontSize: moderateScale(20),
-      color: 'white',
-    },
-
-    hazardRoom: {
-      fontSize: moderateScale(15),
-    },
-
-    tipFooter: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      width: '80%',
-    },
-
-    tipFooterText: {
-      fontSize: moderateScale(15),
-      color: 'white',
-    },
-
-    tipFooterButton: {
-      backgroundColor: '#1C1C1E',
-      borderWidth: 1,
-      borderColor: 'white',
-      borderRadius: 5,
-      width: '80%',
-      height: verticalScale(40),
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: verticalScale(20),
-    },
-
-    tipFooterButtonText: {
-      color: 'white',
-      fontSize: moderateScale(20),
-      fontWeight: 'bold',
-    },
-
-  });
-  
+  // ============================================================================
+  // LAYOUT STYLES
+  // ============================================================================
+
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    backgroundColor: colors.background.primary,
+  },
+
+  // ============================================================================
+  // TEXT STYLES
+  // ============================================================================
+
+  header: {
+    fontSize: typography.h1.fontSize,
+    fontWeight: typography.h1.fontWeight,
+    color: colors.text.primary,
+    alignSelf: 'flex-start',
+    marginLeft: horizontalScale(20),
+    marginTop: verticalScale(10),
+  },
+
+  subheader: {
+    marginTop: verticalScale(10),
+    marginLeft: horizontalScale(20),
+    marginRight: horizontalScale(20),
+    fontSize: moderateScale(20),
+    color: colors.text.primary,
+    alignSelf: 'flex-start',
+  },
+
+  // ============================================================================
+  // HOME PAGE STYLES
+  // ============================================================================
+
+  outerRing: {
+    width: 220,
+    height: 220,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: verticalScale(40),
+  },
+
+  gradientRing: {
+    width: 200,
+    height: 200,
+    borderRadius: borderRadius.round,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  scoreContainer: {
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    backgroundColor: colors.background.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  score: {
+    fontSize: moderateScale(typography.display.fontSize),
+    fontWeight: typography.display.fontWeight,
+    color: colors.text.primary,
+  },
+
+  scoreLabel: {
+    fontSize: moderateScale(20),
+    marginTop: verticalScale(20),
+    marginHorizontal: horizontalScale(20),
+  },
+
+  scoreLabelText: {
+    fontSize: moderateScale(20),
+    color: colors.text.primary,
+    textAlign: 'center',
+  },
+
+  scoreLabelSubtext: {
+    fontSize: moderateScale(typography.caption.fontSize),
+    marginTop: verticalScale(10),
+    marginHorizontal: horizontalScale(20),
+    color: colors.accent.secondary,
+    textAlign: 'center',
+  },
+
+  dashboard: {
+    flex: 1,
+    flexDirection: 'row',
+    marginTop: verticalScale(50),
+    width: '100%',
+    justifyContent: 'space-evenly',
+  },
+
+  dashboardButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.background.secondary,
+    borderRadius: moderateScale(borderRadius.xl),
+    marginBottom: 3.5,
+    marginRight: spacing.md,
+    marginLeft: spacing.md,
+    paddingVertical: verticalScale(15),
+    paddingHorizontal: horizontalScale(10),
+    ...shadows.md,
+  },
+
+  dashboardNumber: {
+    fontSize: moderateScale(typography.display.fontSize),
+    fontWeight: typography.display.fontWeight,
+    color: colors.text.primary,
+  },
+
+  dashboardText: {
+    fontSize: moderateScale(20),
+    color: colors.text.primary,
+    textAlign: 'center',
+  },
+
+  // ============================================================================
+  // ROOMS PAGE STYLES
+  // ============================================================================
+
+  roomHeaderContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  plus: {
+    fontSize: moderateScale(typography.h1.fontSize),
+    color: colors.text.primary,
+    marginTop: verticalScale(10),
+    marginRight: horizontalScale(20),
+  },
+
+  noRooms: {
+    fontSize: moderateScale(20),
+    textAlign: 'center',
+    color: colors.text.primary,
+    marginTop: 'auto',
+    marginBottom: 'auto',
+  },
+
+  room: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    height: verticalScale(100),
+    alignItems: 'center',
+    marginRight: horizontalScale(12),
+    marginLeft: horizontalScale(12),
+    paddingLeft: horizontalScale(spacing.md),
+    paddingRight: horizontalScale(spacing.md),
+    paddingTop: verticalScale(12),
+    paddingBottom: verticalScale(12),
+    marginBottom: verticalScale(12),
+    backgroundColor: colors.background.tertiary,
+    borderRadius: moderateScale(borderRadius.lg),
+    ...shadows.md,
+  },
+
+  roomText: {
+    fontSize: moderateScale(20),
+    color: colors.text.primary,
+  },
+
+  currentRooms: {
+    flex: 1,
+    flexDirection: 'column',
+    width: '100%',
+    marginTop: verticalScale(20),
+  },
+
+  roomFooter: {
+    marginTop: verticalScale(20),
+  },
+
+  roomFooterText: {
+    textAlign: 'center',
+    color: colors.text.primary,
+    fontSize: moderateScale(20),
+    marginTop: verticalScale(12),
+    marginBottom: verticalScale(30),
+    textDecorationLine: 'underline',
+  },
+
+  roomHeaderCont: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.background.primary,
+    width: '100%',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border.accent,
+  },
+
+  roomHeader: {
+    position: 'absolute',
+    alignItems: 'center',
+    fontSize: moderateScale(typography.h3.fontSize),
+    fontWeight: typography.h3.fontWeight,
+    color: colors.text.primary,
+  },
+
+  roomHeaderText: {
+    color: colors.text.primary,
+    fontWeight: typography.h3.fontWeight,
+    fontSize: moderateScale(typography.h3.fontSize),
+    textAlign: 'center',
+    marginVertical: verticalScale(10),
+  },
+
+  backButton: {
+    position: 'absolute',
+    left: 0,
+    marginLeft: horizontalScale(10),
+    marginTop: verticalScale(10),
+  },
+
+  saveButton: {
+    position: 'absolute',
+    right: 0,
+    marginRight: horizontalScale(10),
+    marginTop: verticalScale(10),
+  },
+
+  saveText: {
+    fontSize: moderateScale(20),
+    fontWeight: 'bold',
+  },
+
+  inputHeader: {
+    fontSize: moderateScale(20),
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginLeft: horizontalScale(25),
+    marginRight: horizontalScale(25),
+    marginTop: verticalScale(20),
+    marginBottom: verticalScale(20),
+    color: colors.text.primary,
+  },
+
+  inputContainer: {
+    width: '80%',
+    height: verticalScale(40),
+    marginHorizontal: '10%',
+    marginTop: verticalScale(20),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.background.secondary,
+    borderRadius: borderRadius.md,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+  },
+
+  input: {
+    fontSize: moderateScale(typography.bodySmall.fontSize),
+    width: '100%',
+    height: '100%',
+    textAlign: 'left',
+    paddingLeft: horizontalScale(10),
+    borderBottomColor: colors.border.accent,
+    borderBottomWidth: 1,
+    color: colors.text.primary,
+  },
+
+  // ============================================================================
+  // ASSESSMENT STYLES
+  // ============================================================================
+
+  assessment: {
+    flex: 1,
+    flexDirection: 'column',
+    marginTop: verticalScale(20),
+    width: '100%',
+  },
+
+  assessmentText: {
+    fontSize: moderateScale(20),
+    width: '60%',
+    color: colors.text.primary,
+  },
+
+  assessmentItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginRight: '10%',
+    marginLeft: '10%',
+    marginTop: verticalScale(10),
+    marginBottom: verticalScale(10),
+  },
+
+  assessmentCheckbox: {
+    width: horizontalScale(30),
+    height: verticalScale(30),
+    borderWidth: 2,
+    borderColor: colors.border.primary,
+    borderRadius: borderRadius.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  assessmentButton: {
+    backgroundColor: colors.background.primary,
+    borderWidth: 1,
+    borderColor: colors.border.primary,
+    borderRadius: borderRadius.sm,
+    width: '80%',
+    height: verticalScale(40),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: verticalScale(20),
+  },
+
+  assessmentButtonText: {
+    color: colors.text.primary,
+    fontSize: moderateScale(20),
+    fontWeight: 'bold',
+  },
+
+  roomAddedContainer: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  roomAddedHeader: {
+    fontSize: moderateScale(40),
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: colors.text.primary,
+    marginBottom: '10%',
+  },
+
+  roomAddedText: {
+    fontSize: moderateScale(20),
+    textAlign: 'center',
+    color: colors.text.primary,
+    marginTop: '10%',
+  },
+
+  roomAddedButton: {
+    backgroundColor: colors.background.primary,
+    borderWidth: 1,
+    borderColor: colors.border.primary,
+    borderRadius: borderRadius.sm,
+    width: '80%',
+    height: verticalScale(40),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: verticalScale(20),
+  },
+
+  roomAddedButtonText: {
+    color: colors.text.primary,
+    fontSize: moderateScale(20),
+    fontWeight: 'bold',
+  },
+
+  // ============================================================================
+  // REPORT STYLES
+  // ============================================================================
+
+  reportHeader: {
+    fontSize: moderateScale(typography.h3.fontSize),
+    fontWeight: typography.h3.fontWeight,
+    textAlign: 'center',
+    color: colors.text.primary,
+    marginTop: verticalScale(30),
+  },
+
+  reportItem: {
+    marginLeft: horizontalScale(25),
+    marginRight: horizontalScale(25),
+    marginTop: verticalScale(25),
+    marginBottom: verticalScale(5),
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    width: '80%',
+  },
+
+  reportText: {
+    fontSize: moderateScale(20),
+    textAlign: 'left',
+    color: colors.text.primary,
+    marginLeft: horizontalScale(25),
+  },
+
+  reportButtons: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: verticalScale(20),
+  },
+
+  reportOK: {
+    backgroundColor: colors.background.primary,
+    borderWidth: 1,
+    borderColor: colors.border.primary,
+    borderRadius: borderRadius.sm,
+    height: verticalScale(40),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: horizontalScale(25),
+    marginRight: horizontalScale(25),
+    marginTop: verticalScale(30),
+    width: '80%',
+    alignSelf: 'center',
+  },
+
+  reportOKText: {
+    color: colors.text.primary,
+    fontSize: moderateScale(20),
+    fontWeight: 'bold',
+  },
+
+  // ============================================================================
+  // TIPS PAGE STYLES
+  // ============================================================================
+
+  tipsList: {
+    width: '100%',
+    marginTop: verticalScale(20),
+  },
+
+  noProductsText: {
+    fontSize: moderateScale(20),
+    textAlign: 'center',
+    color: colors.text.primary,
+    marginTop: '80%',
+    marginHorizontal: horizontalScale(25),
+  },
+
+  tipSectionHeader: {
+    fontSize: moderateScale(typography.h3.fontSize),
+    fontWeight: typography.h3.fontWeight,
+    backgroundColor: colors.background.primary,
+    color: colors.text.primary,
+    marginLeft: '5%',
+    paddingTop: verticalScale(15),
+  },
+
+  tip: {
+    width: '80%',
+    marginTop: verticalScale(5),
+    marginBottom: verticalScale(5),
+    borderRadius: borderRadius.lg,
+    backgroundColor: colors.background.primary,
+    padding: horizontalScale(20),
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  tipImage: {
+    width: horizontalScale(80),
+    height: verticalScale(80),
+    borderRadius: borderRadius.sm,
+  },
+
+  tipTextContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    marginLeft: horizontalScale(20),
+  },
+
+  tipText: {
+    fontSize: moderateScale(20),
+    color: colors.text.primary,
+    fontWeight: 'bold',
+  },
+
+  tipDescription: {
+    fontSize: moderateScale(typography.caption.fontSize),
+    color: colors.text.primary,
+    marginBottom: verticalScale(10),
+  },
+
+  tipImportance: {
+    fontSize: moderateScale(typography.caption.fontSize),
+    color: colors.text.primary,
+  },
+
+  affiliateNote: {
+    fontSize: moderateScale(typography.caption.fontSize),
+    color: colors.text.primary,
+    marginTop: verticalScale(10),
+    marginBottom: verticalScale(20),
+    marginLeft: horizontalScale(20),
+  },
+
+  // ============================================================================
+  // HAZARD STYLES
+  // ============================================================================
+
+  hazardContainer: {
+    width: '100%',
+    height: '95%',
+    marginTop: verticalScale(20),
+    marginBottom: verticalScale(40),
+    borderRadius: borderRadius.lg,
+    backgroundColor: colors.background.primary,
+  },
+
+  hazardEmptyText: {
+    fontSize: moderateScale(20),
+    textAlign: 'center',
+    color: colors.text.primary,
+    marginTop: verticalScale(40),
+    marginHorizontal: horizontalScale(25),
+  },
+
+  hazardHeader: {
+    fontSize: moderateScale(typography.h3.fontSize),
+    fontWeight: typography.h3.fontWeight,
+    marginLeft: horizontalScale(25),
+    marginBottom: verticalScale(10),
+    color: colors.text.primary,
+  },
+
+  hazard: {
+    marginTop: verticalScale(10),
+    marginBottom: verticalScale(10),
+    marginLeft: horizontalScale(25),
+    marginRight: horizontalScale(25),
+  },
+
+  hazardLine: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '80%',
+  },
+
+  hazardIconStyle: {
+    width: horizontalScale(50),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  hazardIcon: {
+    marginLeft: horizontalScale(20),
+    marginRight: horizontalScale(20),
+  },
+
+  hazardText: {
+    fontSize: moderateScale(20),
+    color: colors.text.primary,
+  },
+
+  hazardRoom: {
+    fontSize: moderateScale(typography.caption.fontSize),
+  },
+
+  tipFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '80%',
+  },
+
+  tipFooterText: {
+    fontSize: moderateScale(typography.caption.fontSize),
+    color: colors.text.primary,
+  },
+
+  tipFooterButton: {
+    backgroundColor: colors.background.primary,
+    borderWidth: 1,
+    borderColor: colors.border.primary,
+    borderRadius: borderRadius.sm,
+    width: '80%',
+    height: verticalScale(40),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: verticalScale(20),
+  },
+
+  tipFooterButtonText: {
+    color: colors.text.primary,
+    fontSize: moderateScale(20),
+    fontWeight: 'bold',
+  },
+
+  // ============================================================================
+  // PROGRESS TRACKING STYLES
+  // ============================================================================
+
+  progressSummaryContainer: {
+    width: '90%',
+    alignSelf: 'center',
+    marginTop: verticalScale(20),
+    marginBottom: verticalScale(20),
+  },
+
+  progressRingContainer: {
+    alignItems: 'center',
+    marginBottom: verticalScale(20),
+  },
+
+  progressOuterRing: {
+    width: 180,
+    height: 180,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  progressGradientRing: {
+    width: 160,
+    height: 160,
+    borderRadius: borderRadius.round,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  progressInnerCircle: {
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    backgroundColor: colors.background.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  progressPercentage: {
+    fontSize: moderateScale(40),
+    fontWeight: typography.display.fontWeight,
+    color: colors.text.primary,
+  },
+
+  progressLabel: {
+    fontSize: moderateScale(14),
+    color: colors.text.secondary,
+    marginTop: verticalScale(5),
+  },
+
+  progressStatsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+
+  progressSummaryStatsContainer: {
+    paddingHorizontal: horizontalScale(16),
+    paddingBottom: verticalScale(20),
+  },
+
+  stickyStatsAbsolute: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 100,
+    backgroundColor: colors.background.primary,
+    paddingHorizontal: horizontalScale(16),
+    paddingBottom: verticalScale(12),
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border.secondary,
+    ...shadows.md,
+  },
+
+  progressStatCard: {
+    flex: 1,
+    backgroundColor: colors.background.secondary,
+    borderRadius: moderateScale(borderRadius.lg),
+    paddingVertical: verticalScale(12),
+    paddingHorizontal: horizontalScale(8),
+    marginHorizontal: horizontalScale(4),
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'transparent',
+    ...shadows.sm,
+  },
+
+  progressStatNumber: {
+    fontSize: moderateScale(24),
+    fontWeight: typography.h2.fontWeight,
+    color: colors.text.primary,
+  },
+
+  progressStatLabel: {
+    fontSize: moderateScale(12),
+    color: colors.text.secondary,
+    marginTop: verticalScale(4),
+    textAlign: 'center',
+  },
+
+  // ============================================================================
+  // ENHANCED HAZARD CARD STYLES
+  // ============================================================================
+
+  hazardCardContainer: {
+    marginTop: verticalScale(10),
+    marginBottom: verticalScale(10),
+    marginLeft: horizontalScale(20),
+    marginRight: horizontalScale(20),
+    backgroundColor: colors.background.secondary,
+    borderRadius: moderateScale(borderRadius.md),
+    ...shadows.sm,
+  },
+
+  hazardCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: spacing.md,
+    paddingLeft: horizontalScale(20),
+  },
+
+  hazardCardContent: {
+    flex: 1,
+    marginLeft: horizontalScale(16),
+    justifyContent: 'center',
+  },
+
+  hazardCardText: {
+    fontSize: moderateScale(16),
+    color: colors.text.primary,
+    marginBottom: verticalScale(6),
+    lineHeight: moderateScale(22),
+    minHeight: moderateScale(22),
+  },
+
+  hazardStatusBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: verticalScale(4),
+    paddingHorizontal: horizontalScale(8),
+    borderRadius: moderateScale(borderRadius.sm),
+    alignSelf: 'flex-start',
+    minHeight: verticalScale(26),
+    height: verticalScale(26),
+  },
+
+  hazardStatusIcon: {
+    marginRight: horizontalScale(4),
+    width: horizontalScale(16),
+    height: verticalScale(16),
+  },
+
+  hazardStatusText: {
+    fontSize: moderateScale(12),
+    fontWeight: '600',
+    lineHeight: moderateScale(16),
+  },
+
+  hazardActionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: horizontalScale(spacing.md),
+    paddingVertical: verticalScale(12),
+    borderTopWidth: 1,
+    borderTopColor: colors.border.primary,
+  },
+
+  hazardActionButton: {
+    flex: 1,
+    paddingVertical: verticalScale(8),
+    paddingHorizontal: horizontalScale(8),
+    marginHorizontal: horizontalScale(4),
+    borderRadius: moderateScale(borderRadius.sm),
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: horizontalScale(80),
+  },
+
+  hazardActionButtonText: {
+    fontSize: moderateScale(13),
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+
+  // ============================================================================
+  // TIMELINE STYLES
+  // ============================================================================
+
+  timelineContainer: {
+    flex: 1,
+    width: '100%',
+    paddingTop: verticalScale(20),
+  },
+
+  timelineItem: {
+    flexDirection: 'row',
+    marginHorizontal: horizontalScale(20),
+    marginBottom: verticalScale(16),
+    paddingBottom: verticalScale(16),
+    paddingRight: horizontalScale(8),
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border.secondary,
+    backgroundColor: colors.background.primary,
+  },
+
+  timelineDeleteButton: {
+    backgroundColor: colors.status.error,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingRight: horizontalScale(20),
+    marginBottom: verticalScale(16),
+  },
+
+  timelineDeleteText: {
+    color: colors.text.primary,
+    fontWeight: '600',
+    fontSize: moderateScale(14),
+  },
+
+  timelineIconContainer: {
+    width: horizontalScale(40),
+    height: verticalScale(40),
+    borderRadius: moderateScale(borderRadius.round),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: horizontalScale(12),
+  },
+
+  timelineContent: {
+    flex: 1,
+  },
+
+  timelineRoom: {
+    fontSize: moderateScale(12),
+    color: colors.text.secondary,
+    marginBottom: verticalScale(4),
+  },
+
+  timelineHazardText: {
+    fontSize: moderateScale(14),
+    color: colors.text.primary,
+    marginBottom: verticalScale(6),
+  },
+
+  timelineStatusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+  timelineStatus: {
+    fontSize: moderateScale(12),
+    fontWeight: '600',
+  },
+
+  timelineTimestamp: {
+    fontSize: moderateScale(11),
+    color: colors.text.secondary,
+  },
+
+  timelineEmptyText: {
+    fontSize: moderateScale(16),
+    color: colors.text.secondary,
+    textAlign: 'center',
+    marginTop: verticalScale(40),
+    marginHorizontal: horizontalScale(20),
+  },
+});

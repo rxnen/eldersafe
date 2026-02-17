@@ -1,15 +1,17 @@
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, ScrollView, StatusBar, Share, Platform} from 'react-native';
+import { StyleSheet, Text, View, Pressable, FlatList, ScrollView, StatusBar, Share, Platform} from 'react-native';
 // import { SafeAreaView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import React, {useState} from 'react';
-import {horizontalScale, styles, verticalScale} from '../styles/Styles'
+import {horizontalScale, styles, verticalScale} from '../styles/Styles';
+import { colors } from '../styles/theme';
+import { dashboardCard, getButtonStyle } from '../styles/buttonStyles';
 import algo from '../scripting/algorithm';
 import {fetchRooms, fetchPersonalInfo} from '../scripting/rooms';
 import {questions, important, products, roomQuestionNumbers, exclusions} from '../scripting/algorithm';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { FontAwesome } from '@expo/vector-icons'; 
+import { FontAwesome } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as NavigationBar from "expo-navigation-bar";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -153,10 +155,10 @@ export default function Home({navigation}) {
 
     return (
         <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-            {Platform.OS === 'android' && <StatusBar backgroundColor="#1C1C1E" barStyle="light-content" />}
+            {Platform.OS === 'android' && <StatusBar backgroundColor={colors.background.primary} barStyle="light-content" />}
 
             <ScrollView contentContainerStyle={{
-                backgroundColor: '#1C1C1E',
+                backgroundColor: colors.background.primary,
                 alignItems: 'center',
                 justifyContent: 'center',
 
@@ -179,32 +181,71 @@ export default function Home({navigation}) {
                     </LinearGradient>
                 </View>
 
-                <TouchableOpacity style={styles.scoreLabel} onPress={async () => {
-                    const result = await Share.share({
-                        message: `My ElderSafe home safety score is ${score}/5. Find out yours with the ElderSafe app!`,
-                        url: 'https://www.eldersafe.ronenjain.com',
-                      });
-                }} >
+                <Pressable
+                    style={({ pressed }) => [
+                        styles.scoreLabel,
+                        pressed && { opacity: 0.7 }
+                    ]}
+                    onPress={async () => {
+                        const result = await Share.share({
+                            message: `My ElderSafe home safety score is ${score}/5. Find out yours with the ElderSafe app!`,
+                            url: 'https://www.eldersafe.ronenjain.com',
+                        });
+                    }}
+                    accessibilityLabel="Share your home safety score"
+                    accessibilityRole="button"
+                    accessibilityHint="Shares your ElderSafe score via system share sheet"
+                >
                     <Text style={styles.scoreLabelText}>Your Current Home Safety Score</Text>
                     <Text style={styles.scoreLabelSubtext}>Tap to share</Text>
-                </TouchableOpacity>
+                </Pressable>
                 <View style={styles.dashboard}>
-                    <TouchableOpacity style={[styles.dashboardButton, {marginRight: 7.5}]} onPress={() => {
-                        navigation.navigate('RoomScreens')
-                    }}>
+                    <Pressable
+                        style={({ pressed }) => [
+                            styles.dashboardButton,
+                            {marginRight: 7.5},
+                            pressed && dashboardCard.pressed
+                        ]}
+                        onPress={() => {
+                            navigation.navigate('RoomScreens')
+                        }}
+                        accessibilityLabel={`${numRooms} rooms assessed`}
+                        accessibilityRole="button"
+                        accessibilityHint="Navigate to rooms screen"
+                    >
                         <Text style={styles.dashboardNumber}>{numRooms}</Text>
                         <Text style={styles.dashboardText}>Rooms</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.dashboardButton, {marginLeft: 7.5}]} onPress={() => navigation.navigate('Tips', {goTo: 0})}>
+                    </Pressable>
+                    <Pressable
+                        style={({ pressed }) => [
+                            styles.dashboardButton,
+                            {marginLeft: 7.5},
+                            pressed && dashboardCard.pressed
+                        ]}
+                        onPress={() => navigation.navigate('Tips', {goTo: 0})}
+                        accessibilityLabel={`${numHazards} hazards found`}
+                        accessibilityRole="button"
+                        accessibilityHint="Navigate to hazards screen"
+                    >
                         <Text style={styles.dashboardNumber}>{numHazards}</Text>
                         <Text style={styles.dashboardText}>Hazards</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
                 <View style={[styles.dashboard, {marginBottom: 50}]}>
-                    <TouchableOpacity style={[styles.dashboardButton, {marginTop: -(verticalScale(40))}]} onPress={() => navigation.navigate('Tips', {goTo: 1})}>
+                    <Pressable
+                        style={({ pressed }) => [
+                            styles.dashboardButton,
+                            {marginTop: -(verticalScale(40))},
+                            pressed && dashboardCard.pressed
+                        ]}
+                        onPress={() => navigation.navigate('Tips', {goTo: 1})}
+                        accessibilityLabel={`${numPrecautions} suggested home safety products`}
+                        accessibilityRole="button"
+                        accessibilityHint="Navigate to product recommendations"
+                    >
                         <Text style={styles.dashboardNumber}>{numPrecautions}</Text>
                         <Text style={styles.dashboardText}>Suggested Home Safety Products</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
             </ScrollView>
             <ExpoStatusBar style="light" translucent={false} />
