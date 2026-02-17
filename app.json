@@ -23,11 +23,6 @@
         "ITSAppUsesNonExemptEncryption": false
       }
     },
-    "build": {
-      "production": {
-        "resourceClass": "large"
-      }
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
