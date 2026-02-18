@@ -24,14 +24,8 @@ export default function Home({navigation}) {
     const [numPrecautions, setNumPrecautions] = useState(0);
 
     React.useEffect(() => {
-    
-        const loadScore = navigation.addListener('focus', () => {
-            AsyncStorage.getItem('firstLoad').then((value) => {
-                if (value == 'true') {
-                    navigation.navigate('FirstLoad');
-                }
-            });
 
+        const loadScore = navigation.addListener('focus', () => {
             AsyncStorage.multiGet(['personalInfo', 'myRooms']).then((items) => {
                 const roomList = JSON.parse(items[1][1]);
                 if (roomList == null || roomList == undefined || roomList == [] || roomList == '[]' || roomList.length == 0) {
