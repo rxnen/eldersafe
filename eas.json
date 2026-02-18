@@ -13,9 +13,7 @@
       },
       "distribution": "internal"
     },
-    "production": {
-      "resourceClass": "large"
-    }
+    "production": {}
   },
   "submit": {
     "production": {}
