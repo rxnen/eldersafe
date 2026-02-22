@@ -784,8 +784,11 @@ const HazardTimeline = ({ isActive }) => {
 const Products = () => {
     const [tipsList, setTipsList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const isFocused = useIsFocused();
 
     useEffect(() => {
+        if (!isFocused) return;
+
         const loadProducts = async () => {
             // Only show loading on initial load
             if (tipsList.length === 0) {
@@ -855,7 +858,7 @@ const Products = () => {
         };
 
         loadProducts();
-    }, []);
+    }, [isFocused]);
 
     if (isLoading) {
         return (
@@ -935,10 +938,13 @@ export default function Tips() {
     const insets = useSafeAreaInsets();
 
     useEffect(() => {
-        if (isFocused) {
-          setIndex(initialIndex);
+        // Apply goTo param when explicitly provided and different from current tab
+        if (isFocused && route.params?.goTo !== undefined && route.params.goTo !== index) {
+          setIndex(route.params.goTo);
+          // Clear the param so it doesn't persist on subsequent navigations
+          navigation.setParams({ goTo: undefined });
         }
-      }, [isFocused, initialIndex]);
+      }, [isFocused, route.params?.goTo, index]);
 
     const layout = useWindowDimensions();
 
