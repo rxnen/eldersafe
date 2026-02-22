@@ -38,4 +38,5 @@ yarn-error.*
 google-services.json
 
 
-eldersafe-public.aab
+eldersafe-public.aabios/
+android/
