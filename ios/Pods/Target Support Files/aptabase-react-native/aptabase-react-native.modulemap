@@ -1,0 +1,6 @@
+framework module aptabase_react_native {
+  umbrella header "aptabase-react-native-umbrella.h"
+
+  export *
+  module * { export * }
+}

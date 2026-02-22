@@ -53,7 +53,7 @@ export default function FirstLoad({navigation}) {
             navigation.getParent()?.setOptions({
                 tabBarStyle: {
                     backgroundColor: colors.background.primary,
-                    display: 'block',
+                    display: 'flex',
                     borderTopWidth: 0,
                     elevation: 0,
                 }
@@ -302,7 +302,7 @@ export default function FirstLoad({navigation}) {
                                         AsyncStorage.setItem('firstLoad', 'false');
                                         const personalInfo = {age: age , mobility: value, vision: vision, hearing: hearing, userType: userType};
                                         AsyncStorage.setItem('personalInfo', JSON.stringify(personalInfo));
-                                        navigation.navigate("Home")
+                                        navigation.replace("Home")
                                     }
                                 }}
                                 accessibilityLabel="Continue"

@@ -1,0 +1,6 @@
+framework module Pods_ElderSafe {
+  umbrella header "Pods-ElderSafe-umbrella.h"
+
+  export *
+  module * { export * }
+}

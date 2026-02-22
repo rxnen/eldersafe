@@ -338,11 +338,11 @@ export default class App extends React.Component {
 
   render() {
 
-
     // if (this.state.loading) return <ActivityIndicator size="large" />
     if (this.state.showRealApp) {
 
       return (
+        <View style={{ flex: 1, backgroundColor: colors.background.primary }}>
         <SafeAreaProvider>
           <NavigationContainer theme={theme} style={{ backgroundColor: colors.background.primary }}>
             <Tab.Navigator
@@ -408,9 +408,11 @@ export default class App extends React.Component {
             </Tab.Navigator>
           </NavigationContainer>
         </SafeAreaProvider>
+        </View>
       );
     } else {
       return (
+        <View style={{ flex: 1, backgroundColor: colors.background.primary }}>
         <AppIntroSlider
           data={slides}
           renderItem={this._renderItem}
@@ -422,6 +424,7 @@ export default class App extends React.Component {
           showSkipButton={true}
           skipLabel="Skip"
         />
+        </View>
       );
     }
   }
