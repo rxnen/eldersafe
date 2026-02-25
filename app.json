@@ -7,7 +7,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#722890"
     },
-    "version": "1.1.8",
+    "version": "1.1.9",
     "orientation": "portrait",
     "icon": "./assets/icon-gradient.png",
     "newArchEnabled": true,
@@ -18,7 +18,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.rjmobile.eldersafe",
-      "buildNumber": "1.1.8",
+      "buildNumber": "1.1.9",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -29,7 +29,7 @@
         "backgroundColor": "#722890"
       },
       "package": "com.bobbrown.eldersafe",
-      "versionCode": 18
+      "versionCode": 19
     },
     "web": {
       "favicon": "./assets/favicon.png"
