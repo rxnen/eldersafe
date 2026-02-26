@@ -29,7 +29,7 @@
         "backgroundColor": "#722890"
       },
       "package": "com.bobbrown.eldersafe",
-      "versionCode": 19,
+      "versionCode": 20,
       "ndkVersion": "26.1.10909125"
     },
     "web": {

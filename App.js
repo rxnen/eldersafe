@@ -258,10 +258,6 @@ export default class App extends React.Component {
     try {
       // StatusBar.setBarStyle('light-content', true);
 
-      if (__DEV__) {
-        await AsyncStorage.clear();
-}
-
       const value = await AsyncStorage.getItem('firstLoad');
       const personalInfo = await AsyncStorage.getItem('personalInfo');
       const isFirstLoad = value == null || value == undefined;
