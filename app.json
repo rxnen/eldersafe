@@ -7,7 +7,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#722890"
     },
-    "version": "1.1.9",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon-gradient.png",
     "newArchEnabled": true,
@@ -29,7 +29,7 @@
         "backgroundColor": "#722890"
       },
       "package": "com.bobbrown.eldersafe",
-      "versionCode": 21,
+      "versionCode": 22,
       "targetSdkVersion": 35,
       "ndkVersion": "26.1.10909125"
     },
@@ -42,14 +42,18 @@
       }
     },
     "plugins": [
-      [
-        "expo-build-properties",
-        {
-          "ios": {
-            "useFrameworks": "static"
-          }
-        }
-      ]
-    ]
+  [
+    "expo-build-properties",
+    {
+      "ios": {
+        "useFrameworks": "static"
+      },
+      "android": {
+        "enableSplit16kbPages": true,
+        "ndkVersion": "27.0.12077973"
+      }
+    }
+  ]
+]
   }
 }
