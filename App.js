@@ -263,6 +263,13 @@ export default class App extends React.Component {
       const isFirstLoad = value == null || value == undefined;
       const needsPersonalInfo = personalInfo == null || personalInfo == undefined;
 
+      // if development build, always show intro for testing
+      // if (__DEV__) {
+      //   this.setState({ showRealApp: false, needsPersonalInfo: true, loading: false });
+      //   await SplashScreen.hideAsync();
+      //   return;
+      // }
+
       // Track the event
       trackEvent("AppLaunch", {
         firstLoad: isFirstLoad ? "true" : "false",
